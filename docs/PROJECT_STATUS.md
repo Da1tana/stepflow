@@ -57,9 +57,9 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 ## Not implemented yet
 
 - Real Chromium verification of navigation reinjection and cross-origin pause/recovery.
-- Service-worker termination/restart recovery E2E (new test, CI pending).
-- E2E coverage of a real browser-action popup start followed by trusted clicks on a fixture page.
-- End-to-end assertions that input values and password contents never reach local storage.
+- Service-worker termination/restart persistence is covered by Chromium E2E: the test terminates the worker target through CDP, wakes it with a message, and verifies the persisted draft.
+- Real browser-action popup start followed by trusted page-click capture is not covered; current popup smoke tests open the popup document as an extension page.
+- End-to-end typed-value canaries through real browser capture and storage are not covered; unit tests verify that the recorder does not read values and the core redacts password labels.
 - Screenshots, guide editor, and export.
 
 ## Privacy constraints
@@ -83,15 +83,15 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 
 ## Verification
 
-- CI run [#82](https://github.com/Da1tana/stepflow/actions/runs/45604755511) passed on implementation HEAD `4264601759430c3c86789354100d4328c650c726`: dependency installation, static validation, 23/23 unit tests, Chromium installation, clean extension build, 18/18 Chromium E2E tests, screenshots, and build artifact upload.
-- Existing E2E verifies popup rendering/open-panel, side-panel state, draft save/cancel, storage-driven guide rendering, service-worker messaging, and real tab-close draft preservation in RU and EN. CI #82 passed 23/23 unit and 18/18 E2E tests, including tab-close and forced service-worker restart recovery. It does not yet exercise a real browser-action popup start followed by trusted clicks on a page.
+- CI run [#90](https://github.com/Da1tana/stepflow/actions/runs/45605218843) passed on HEAD `e8ff75977a2afdfb4c7c84195dbf75e09beab075`: dependency installation, static validation, 26/26 unit tests, Chromium installation, clean extension build, 18/18 Chromium E2E tests (9 English + 9 Russian), screenshots, and build artifact upload.
+- E2E verifies popup/panel smoke flows, draft save/cancel, guide rendering, service-worker messaging, tab-close preservation, and draft persistence after forced service-worker termination/restart in RU and EN. It does not exercise a real browser-action popup start followed by trusted clicks on a page.
 - See [TEST_MAP.md](TEST_MAP.md) for the current test inventory and remaining acceptance gaps.
 - No local terminal execution is available in the current GitHub-only workflow.
 
 ## Immediate next actions
 
-1. Add real popup-started trusted-click E2E and storage privacy assertions.
-2. Add Chromium lifecycle E2E for same-origin navigation, cross-origin denial, and tab closure.
-3. Build browser-level coverage for real browser-action popup invocation, trusted click capture, and typed-value privacy canaries.
-4. Add real Chromium same-origin/cross-origin navigation recovery tests.
+1. Investigate a Chromium CDP/native-popup harness for real browser-action popup invocation and trusted-click capture without broadening permissions.
+2. Add end-to-end typed-value privacy canaries that inspect draft and saved-guide storage.
+3. Add real Chromium same-origin navigation reinjection and cross-origin pause/recovery tests.
+4. Add a real-browser restricted-page start test.
 5. Re-run CI and update the acceptance decision.
