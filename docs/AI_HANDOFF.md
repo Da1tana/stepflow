@@ -69,9 +69,9 @@ An assistant using the GitHub integration may be able to read and write reposito
 
 Verified on 2026-11-25:
 - PR #1 (foundation) is merged into `main`.
-- PR [#2](https://github.com/Da1tana/stepflow/pull/2) is an open draft; it is not merged.
-- `feat/recording-mvp` is synchronized with `main`; inspect compare before each new task.
-- The feature branch includes the project map and Recording MVP implementation across the pure core, popup, content recorder, service worker, storage, and side panel.
+- PR [#2](https://github.com/Da1tana/stepflow/pull/2) is closed and was never merged; it is superseded by draft [PR #3](https://github.com/Da1tana/stepflow/pull/3).
+- Active branch: `feat/recording-mvp-recovery`, based on the last complete CI-passing implementation commit. `main` is unchanged; inspect compare before each new task.
+- The active recovery branch includes the project map and Recording MVP implementation across the pure core, popup, content recorder, service worker, storage, and side panel.
 - Pure core modules: `privacy.js`, `step-label.js`, `restricted-url.js`, and `recording.js`, with unit tests.
 - Browser flow implemented: `activeTab` + `scripting`, popup start, content-script injection, trusted-click capture, sender/tab/frame/session checks, second sanitization boundary, local draft persistence, live side-panel display, finish/save, and cancel.
 - Remaining before calling Recording MVP verified: dedicated E2E that starts from the real popup user gesture and captures real trusted clicks; tests proving sensitive typed values never reach storage; same-origin navigation reinjection; cross-origin pause/recovery; tab-close and service-worker restart behavior.
