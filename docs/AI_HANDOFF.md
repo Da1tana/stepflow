@@ -34,7 +34,7 @@ Do not assume the plan is already implemented. Check the actual files and curren
 - Continue an existing feature branch when it is the intended active workstream; do not create duplicate branches without a reason.
 - Before every task, inspect the repository, current branch, open PRs, recent commits, and compare the feature branch with `main`.
 - Keep changes small and reviewable. Commit each completed logical stage with a descriptive message.
-- After every stage, update the relevant project map: changelog, status, roadmap, and/or decision log. Do not add noise for trivial typo fixes.
+- After every meaningful stage, update the relevant project map: changelog, status, roadmap, and/or decision log.
 - Open or update a Pull Request for review. **Do not merge a PR unless the repository owner explicitly asks.**
 - Never force-push, rewrite history, or delete branches without explicit approval.
 - Record important decisions and their rationale in the repository, not only in chat.
@@ -64,10 +64,10 @@ An assistant using the GitHub integration may be able to read and write reposito
 
 Verified on 2026-11-25:
 - PR #1 (foundation) is merged into `main`.
-- The foundation includes the MV3 shell, popup, side panel, storage/settings, RU/EN localization, validation, unit tests, E2E tests, and CI.
-- `feat/recording-mvp` contains the technical plan and project documentation; the recording implementation is not present yet.
-- Latest compare: the feature branch is 4 commits ahead of and 1 commit behind `main` (diverged). Its reported file diff contains documentation only. Synchronize with a normal merge/update-branch operation before coding; do not force-push.
-- No open PR was found at the time of this check.
+- PR [#2](https://github.com/Da1tana/stepflow/pull/2) is an open draft for documentation and the Recording MVP plan; it is not merged.
+- `feat/recording-mvp` contains documentation and the technical plan; the recording implementation is not present yet.
+- Latest compare: the feature branch is 10 commits ahead of and 1 commit behind `main` (diverged). Its reported file diff contains documentation only.
+- PR #2 reports `mergeable: false`; re-check GitHub's current mergeability and resolve the branch sync through a normal merge/update-branch operation. Never force-push.
 - No fresh CI pass is claimed for the documentation commits.
 
 ## Definition of done for every implementation stage
