@@ -160,6 +160,15 @@ for (const locale of ['en-US', 'ru-RU']) {
         const sameOriginAddress = sameOriginServer.address();
         const crossOriginAddress = crossOriginServer.address();
         const target = await app.context.newPage();
+        const monitor = await app.openPage('src/sidepanel/sidepanel.html');
+        await monitor.page.evaluate(() => {
+          window.__draftStates = [];
+          chrome.storage.onChanged.addListener((changes, area) => {
+            if (area === 'local' && changes['sf.recordingDraft']) {
+              window.__draftStates.push(changes['sf.recordingDraft'].newValue ?? null);
+            }
+          });
+        });
 
         const readDraft = () => app.serviceWorker.evaluate(async () => {
           const { 'sf.recordingDraft': value } = await chrome.storage.local.get('sf.recordingDraft');
@@ -188,6 +197,8 @@ for (const locale of ['en-US', 'ru-RU']) {
           assert.ok(initial.steps.length === 0);
 
           await target.goto(`http://127.0.0.1:${sameOriginAddress.port}/same-origin`);
+          await monitor.page.waitForFunction(() => window.__draftStates.some((value) => value?.status === 'paused' && value.pauseReason === 'navigation'));
+          await monitor.page.waitForFunction(() => window.__draftStates.some((value) => value?.status === 'recording' && value.pauseReason === null));
           const resumed = await waitForDraft(
             (value) => value?.status === 'recording' && value.pauseReason === null,
             'same-origin navigation did not resume recording',
@@ -201,15 +212,17 @@ for (const locale of ['en-US', 'ru-RU']) {
           assert.match(captured.steps[0].title, /Same-origin safe action/);
 
           await target.goto(`http://127.0.0.1:${crossOriginAddress.port}/cross-origin`);
-          const paused = await waitForDraft(
-            (value) => value?.status === 'paused' && value.pauseReason === 'navigation',
-            'cross-origin navigation should leave recording paused when activeTab access is revoked',
-          );
+          await monitor.page.waitForFunction(() => window.__draftStates.some((value) => value?.status === 'paused' && value.pauseReason === 'navigation'));
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          const paused = await readDraft();
+          assert.equal(paused?.status, 'paused', 'cross-origin navigation must not resume without activeTab access');
+          assert.equal(paused.pauseReason, 'navigation');
           assert.equal(paused.id, initial.id);
           assert.equal(paused.steps.length, 1, 'captured steps survive denied reinjection');
           assert.match(paused.steps[0].title, /Same-origin safe action/);
         } finally {
           await target.close();
+          await monitor.page.close();
           await Promise.all([
             new Promise((resolve) => sameOriginServer.close(resolve)),
             new Promise((resolve) => crossOriginServer.close(resolve)),
