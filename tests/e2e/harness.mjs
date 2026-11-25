@@ -54,5 +54,22 @@ export async function launchWithExtension({ headless = !process.env.HEADED, user
     return { page, errors };
   }
 
-  return { context, serviceWorker, extensionId, openPage };
+  async function stopServiceWorker() {
+    const browser = context.browser();
+    if (!browser) throw new Error('Persistent Chromium browser is unavailable');
+    const cdp = await browser.newBrowserCDPSession();
+    try {
+      const { targetInfos } = await cdp.send('Target.getTargets');
+      const target = targetInfos.find((item) => (
+        item.type === 'service_worker'
+        && item.url.startsWith(`chrome-extension://${extensionId}/`)
+      ));
+      if (!target) throw new Error('StepFlow service worker target was not found');
+      await cdp.send('Target.closeTarget', { targetId: target.targetId });
+    } finally {
+      await cdp.detach();
+    }
+  }
+
+  return { context, serviceWorker, extensionId, openPage, stopServiceWorker };
 }
