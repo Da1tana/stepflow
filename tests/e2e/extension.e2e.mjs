@@ -85,9 +85,11 @@ for (const locale of ['en-US', 'ru-RU']) {
           await target.goto(`http://127.0.0.1:${address.port}/fixture`);
           await target.bringToFront();
           const popup = await app.openActionPopup();
-          await popup.page.waitForFunction(() => !document.getElementById('start-recording').disabled);
+          await popup.page.waitForFunction(() => !document.getElementById('start-recording').disabled, null, { timeout: 5_000 });
+          const popupClosed = popup.page.waitForEvent('close', { timeout: 5_000 });
           await popup.page.click('#start-recording');
-          await popup.page.waitForEvent('close', { timeout: 5_000 });
+          await popupClosed;
+          await popup.openPromise;
           assert.deepEqual(popup.errors, []);
 
           for (const [selector, value] of [
