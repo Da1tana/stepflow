@@ -80,6 +80,9 @@ test('recorder never reads or sends password, text, email or textarea values', (
     ['INPUT', { type: 'text' }, 'textbox'],
     ['INPUT', { type: 'email' }, 'textbox'],
     ['TEXTAREA', {}, 'textbox'],
+    ['SELECT', {}, 'select'],
+    ['INPUT', { type: 'checkbox' }, 'checkbox'],
+    ['INPUT', { type: 'radio' }, 'radio'],
   ];
 
   for (const [tag, attrs, role] of fields) {
@@ -91,6 +94,9 @@ test('recorder never reads or sends password, text, email or textarea values', (
     { role: 'textbox', label: '' },
     { role: 'textbox', label: '' },
     { role: 'textbox', label: '' },
+    { role: 'select', label: '' },
+    { role: 'checkbox', label: '' },
+    { role: 'radio', label: '' },
   ]);
   assert.equal(JSON.stringify(app.messages).includes('private'), false);
 });
