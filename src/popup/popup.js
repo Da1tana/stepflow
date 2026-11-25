@@ -14,8 +14,13 @@ const els = {
 
 // Resolved up-front: chrome.sidePanel.open() must be called synchronously
 // inside the user gesture, so no `await` may precede it in the click handler.
+// The button stays disabled until the window id is known.
 let windowId;
-chrome.windows.getCurrent().then((win) => (windowId = win.id));
+els.openPanel.disabled = true;
+chrome.windows.getCurrent().then((win) => {
+  windowId = win.id;
+  els.openPanel.disabled = false;
+});
 
 /** Opens the side panel for the current window. */
 async function openSidePanel() {

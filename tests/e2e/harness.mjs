@@ -1,0 +1,58 @@
+/**
+ * Launches a clean Chromium with the unpacked extension loaded.
+ * Shared by the e2e tests and `npm run chromium`.
+ *
+ * Uses Playwright's bundled Chromium by default (install once with
+ * `npx playwright install chromium`). It is a separate browser with its
+ * own throw-away profile, so corporate Chrome policies do not apply.
+ *
+ * Env:
+ *   CHROMIUM_PATH  use another Chromium / Chrome for Testing binary
+ *   HEADED=1       show the browser window while tests run
+ *   EXTENSION_DIR  load another build, e.g. dist/stepflow
+ */
+import { chromium } from 'playwright';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+export const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
+export const EXTENSION_PATH = process.env.EXTENSION_DIR ? resolve(process.env.EXTENSION_DIR) : REPO_ROOT;
+
+/**
+ * @param {{ headless?: boolean, userDataDir?: string, locale?: string }} [options]
+ */
+export async function launchWithExtension({ headless = !process.env.HEADED, userDataDir = '', locale = 'en-US' } = {}) {
+  const context = await chromium.launchPersistentContext(userDataDir, {
+    // Extensions need the full browser; "--headless=new" keeps it windowless.
+    headless: false,
+    executablePath: process.env.CHROMIUM_PATH || undefined,
+    locale,
+    viewport: null,
+    args: [
+      ...(headless ? ['--headless=new'] : []),
+      `--disable-extensions-except=${EXTENSION_PATH}`,
+      `--load-extension=${EXTENSION_PATH}`,
+      `--lang=${locale}`,
+      '--no-first-run',
+      '--no-default-browser-check',
+    ],
+  });
+
+  let [serviceWorker] = context.serviceWorkers();
+  serviceWorker ??= await context.waitForEvent('serviceworker', { timeout: 15_000 });
+  const extensionId = new URL(serviceWorker.url()).host;
+
+  /** Opens an extension page (e.g. "src/popup/popup.html") in a tab and collects its errors. */
+  async function openPage(path, viewport = { width: 380, height: 640 }) {
+    const page = await context.newPage();
+    const errors = [];
+    page.on('pageerror', (err) => errors.push(err.message));
+    page.on('console', (msg) => msg.type() === 'error' && errors.push(msg.text()));
+    await page.setViewportSize(viewport);
+    await page.goto(`chrome-extension://${extensionId}/${path}`);
+    await page.waitForLoadState('load');
+    return { page, errors };
+  }
+
+  return { context, serviceWorker, extensionId, openPage };
+}

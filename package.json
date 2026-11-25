@@ -7,10 +7,18 @@
   "license": "MIT",
   "scripts": {
     "validate": "node scripts/validate.mjs",
-    "test": "node --test \"tests/**/*.test.mjs\"",
-    "check": "npm run validate && npm test"
+    "test": "node --test \"tests/unit/**/*.test.mjs\"",
+    "test:e2e": "node --test --test-concurrency=1 \"tests/e2e/**/*.e2e.mjs\"",
+    "check": "npm run validate && npm test",
+    "check:all": "npm run check && npm run test:e2e",
+    "chromium": "node scripts/chromium.mjs",
+    "setup:browser": "playwright install chromium",
+    "pack": "node scripts/pack.mjs"
   },
   "engines": {
     "node": ">=22"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
   }
 }

@@ -53,7 +53,7 @@ export const appHandlers = {
 1. Добавить типы сообщений в `MSG` (`recording/start`, `recording/stop`, …) в `shared/js/constants.js`.
 2. Создать `src/background/handlers/recording.js` с картой обработчиков и подключить её в `service-worker.js`:
    `createRouter({ ...appHandlers, ...recordingHandlers })`.
-3. Доменную логику (сборка шага из события, формирование заголовка) положить в `src/core/`, покрыть тестами в `tests/`.
+3. Доменную логику (сборка шага из события, формирование заголовка) положить в `src/core/`, покрыть тестами в `tests/unit/`, а пользовательский сценарий — в `tests/e2e/`.
 4. Если нужен content script — создать `src/content/` и внедрять его программно через `chrome.scripting.executeScript` только во время записи. Добавить `activeTab` и `scripting` в manifest и в белый список `validate.mjs`.
 5. Тексты — в оба файла `_locales/*/messages.json`; в разметке использовать `data-i18n`.
 6. UI-элементы собирать из `.sf-*` компонентов и токенов, новые компоненты — в `components.css`.

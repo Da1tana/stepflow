@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { addStep, countSteps, createGuide } from '../src/core/guide.js';
+import { addStep, countSteps, createGuide } from '../../src/core/guide.js';
 
 test('createGuide returns an empty guide', () => {
   const guide = createGuide({ title: 'Demo' });
