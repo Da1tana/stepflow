@@ -16,7 +16,8 @@ This file is the acceptance-test inventory. A feature is not considered verified
 | Restricted URL classification | `tests/unit/restricted-url.test.mjs` | Unit | Covered |
 | Localized step labels | `tests/unit/step-label.test.mjs` | Unit | Covered |
 | Recording session transitions | `tests/unit/recording.test.mjs` | Unit | Covered |
-| Password-role canary is absent from the generated recording step | `tests/unit/recording.test.mjs` | Unit | Covered; 23/23 unit tests passed in CI #68 |
+| Password-role canary is absent from the generated recording step | `tests/unit/recording.test.mjs` | Unit | Covered; 23/23 unit tests passed in CI #82 |
+| Content recorder ignores untrusted clicks and never reads input values/page text/HTML | `tests/unit/recorder.test.mjs` | Unit with fake DOM | Added; CI pending |
 | Guide conversion from recording | `tests/unit/guide-recording.test.mjs` | Unit | Covered |
 | Navigation loading pauses active draft | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
 | Successful reinjection resumes draft | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
@@ -41,7 +42,7 @@ This file is the acceptance-test inventory. A feature is not considered verified
 | P0 | Start recording from the real browser-action popup on an ordinary web tab | Popup user gesture grants temporary access; service worker injects recorder into the intended active tab | Not covered |
 | P0 | Capture a real trusted click | A real page click creates exactly one safe step in the active draft | Not covered |
 | P0 | Sensitive inputs are never persisted | Type unique canary values into text, email, password and textarea controls; click supported controls; inspect all relevant local storage and guide data for canaries | Unit tests cover password-role and sensitive-label sanitization; real typed-value/browser capture test remains not covered |
-| P0 | Content-script privacy boundary | Confirm captured descriptor contains only allowed role/label fields and no value, selector, text, HTML or URL | Partially covered by code review and unit tests; no browser assertion |
+| P0 | Content-script privacy boundary | Confirm captured descriptor contains only allowed role/label fields and no value, selector, text, HTML or URL | Unit harness now asserts no access to value/text/HTML and ignores untrusted clicks; real browser capture assertion remains open |
 | P1 | Same-origin navigation | Navigate within same origin; draft pauses, recorder is reinjected, recording resumes once | Unit behavior covered; real Chromium E2E not covered |
 | P1 | Cross-origin navigation | Navigate to another origin; reinjection denial leaves draft paused and preserves existing steps | Mocked denial covered; real Chromium E2E not covered |
 | P1 | Recorded tab closes | Draft remains paused and can still be saved/discarded | Mocked unit + new Chromium E2E; CI pending |
