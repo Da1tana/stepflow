@@ -77,8 +77,8 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 
 ## Verification
 
-- CI for pure-core commit `27d1123` passed validation, unit tests, Chromium setup, package build, and existing E2E tests.
-- Browser-integration code is newer than that run and is not yet verified by CI.
+- CI run [#30](https://github.com/Da1tana/stepflow/actions/runs/45593035127) for browser-integration commit `bbb0e6f` passed: manifest/permissions/i18n validation, unit tests, Chromium installation, clean package build, and existing Chromium E2E suite.
+- The E2E suite verifies the existing popup/panel flows and localization. Dedicated real-click recording/privacy E2E tests are still outstanding.
 - No local terminal execution is available in the current GitHub-only workflow.
 
 ## Immediate next actions
