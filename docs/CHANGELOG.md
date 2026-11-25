@@ -4,6 +4,14 @@ This file is the chronological map of meaningful project changes. It complements
 
 ## 2026-11-25
 
+### Repository branch recovery and PR continuity
+- A documentation commit was accidentally created with an incomplete Git tree because the tree API was given a commit SHA instead of a tree SHA. The resulting branch head omitted existing files; `main` was not modified.
+- To preserve the no-force-push/no-history-rewrite rule, recovered the complete repository from the last intact, CI-passing implementation commit `89516fd` onto `feat/recording-mvp-recovery`.
+- Opened draft [PR #3](https://github.com/Da1tana/stepflow/pull/3) with the full source tree and current project documentation.
+- Closed [PR #2](https://github.com/Da1tana/stepflow/pull/2) without merging; it is superseded by PR #3.
+- The recovery branch compares cleanly with `main` (0 commits behind); no code was merged into `main`.
+
+
 ### Handoff map refreshed
 - Updated `docs/AI_HANDOFF.md` to match the current branch: pure recording core, popup-driven capture, local draft persistence, live side-panel steps, and save/cancel are implemented.
 - Explicitly listed the remaining verification gaps: real popup-started trusted-click E2E, sensitive-input storage assertions, navigation recovery, tab close, and service-worker restart.
@@ -18,7 +26,7 @@ This file is the chronological map of meaningful project changes. It complements
 - Added live recording-step rendering and finish/cancel controls to the side panel.
 - Added RU/EN strings and E2E coverage for displaying a draft, saving a guide, and discarding a draft.
 - First E2E run passed validation and all 18 unit tests, then caught a test expectation mismatch: cancellation removes the draft key, so `chrome.storage.local.get` returns `undefined`, not `null`. Updated the assertion to normalize absent and null values; application behavior is unchanged.
-- CI for the corrected head is pending; do not mark it complete until the current head passes.
+- CI run [#48](https://github.com/Da1tana/stepflow/actions/runs/45595528199) passed for the corrected implementation head: validation, 18 unit tests, Chromium install, package build, and all E2E tests in RU/EN.
 
 
 ### Browser integration — first recording slice
