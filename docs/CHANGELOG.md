@@ -5,6 +5,7 @@ This file is the chronological map of meaningful project changes. It complements
 ## 2026-11-25
 
 ### Verification map and status reconciliation
+- Added `tests/unit/recorder.test.mjs` with a fake DOM harness to prove the content recorder ignores untrusted clicks and does not read form values, page text, or HTML. CI pending.
 - Added Chromium E2E coverage for closing the recorded tab and preserving the draft paused with captured steps.
 - Added a CDP-based test helper and Chromium E2E scenario that terminates the extension service worker, wakes it with a message, and verifies the draft survives in `chrome.storage.local`.
 - CI run [#82](https://github.com/Da1tana/stepflow/actions/runs/45604755511) passed: 23/23 unit tests and 18/18 Chromium E2E tests. It verifies both recorded-tab closure and forced service-worker termination/restart with draft persistence.
