@@ -18,10 +18,12 @@ Screenshots, guide editing, and export are later milestones.
 
 1. `README.md` — product, setup, checks, and current capabilities.
 2. `docs/PROJECT_STATUS.md` — verified implementation status and known gaps.
-3. `docs/ROADMAP.md` — planned sequence and acceptance gates.
-4. `docs/ARCHITECTURE.md` — architectural boundaries and extension contexts.
-5. `docs/plans/recording-mvp.md` — approved technical direction and detailed MVP plan.
-6. `manifest.json`, `package.json`, and relevant source/tests before proposing code changes.
+3. `docs/ROADMAP.md` — milestone sequence and acceptance gates.
+4. `docs/CHANGELOG.md` — chronological map of meaningful changes.
+5. `docs/DECISIONS.md` — decisions, rationale, and open technical questions.
+6. `docs/ARCHITECTURE.md` — architectural boundaries and extension contexts.
+7. `docs/plans/recording-mvp.md` — detailed Recording MVP proposal.
+8. `manifest.json`, `package.json`, and relevant source/tests before proposing code changes.
 
 Do not assume the plan is already implemented. Check the actual files and current GitHub state.
 
@@ -32,9 +34,9 @@ Do not assume the plan is already implemented. Check the actual files and curren
 - Continue an existing feature branch when it is the intended active workstream; do not create duplicate branches without a reason.
 - Before every task, inspect the repository, current branch, open PRs, recent commits, and compare the feature branch with `main`.
 - Keep changes small and reviewable. Commit each completed logical stage with a descriptive message.
+- After every stage, update the relevant project map: changelog, status, roadmap, and/or decision log. Do not add noise for trivial typo fixes.
 - Open or update a Pull Request for review. **Do not merge a PR unless the repository owner explicitly asks.**
 - Never force-push, rewrite history, or delete branches without explicit approval.
-- Keep this handoff, project status, roadmap, README, and architecture documentation current when decisions or implementation status change.
 - Record important decisions and their rationale in the repository, not only in chat.
 - The project must remain portable between AI tools. Do not rely on a single provider's private project format, hidden memory, or chat thread.
 
@@ -60,18 +62,19 @@ An assistant using the GitHub integration may be able to read and write reposito
 
 ## Current handoff point
 
-At the time this document was added:
+Verified on 2026-11-25:
 - PR #1 (foundation) is merged into `main`.
 - The foundation includes the MV3 shell, popup, side panel, storage/settings, RU/EN localization, validation, unit tests, E2E tests, and CI.
-- `feat/recording-mvp` contains the technical plan at `docs/plans/recording-mvp.md`; the recording implementation is not present yet.
-- The feature branch is one commit ahead of and one commit behind `main` (diverged). Inspect and reconcile this safely before implementation; do not force-push.
-- This handoff documentation is being added on the existing feature branch. The branch is not merged into `main`.
+- `feat/recording-mvp` contains the technical plan and project documentation; the recording implementation is not present yet.
+- Latest compare: the feature branch is 4 commits ahead of and 1 commit behind `main` (diverged). Its reported file diff contains documentation only. Synchronize with a normal merge/update-branch operation before coding; do not force-push.
+- No open PR was found at the time of this check.
+- No fresh CI pass is claimed for the documentation commits.
 
 ## Definition of done for every implementation stage
 
 1. Code and tests are committed to the intended feature branch.
 2. Static validation and relevant unit/E2E tests have run in CI where possible.
 3. CI result is checked, not assumed.
-4. Documentation and status are updated.
+4. Changelog/status/decision documentation is updated where appropriate.
 5. Working changes are represented in a PR; no unapproved merge.
 6. The final report links the commit/PR and clearly states remaining risks.
