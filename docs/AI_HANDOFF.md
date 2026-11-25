@@ -66,7 +66,7 @@ Verified on 2026-11-25:
 - PR #1 (foundation) is merged into `main`.
 - PR [#2](https://github.com/Da1tana/stepflow/pull/2) is an open draft for documentation and the Recording MVP plan; it is not merged.
 - `feat/recording-mvp` contains documentation and the technical plan; the recording implementation is not present yet.
-- Latest compare: the feature branch is 10 commits ahead of and 1 commit behind `main` (diverged). Its reported file diff contains documentation only.
+- The feature branch is diverged from `main`; re-run GitHub compare immediately before any branch operation. Its reported file diff contains documentation only.
 - PR #2 reports `mergeable: false`; re-check GitHub's current mergeability and resolve the branch sync through a normal merge/update-branch operation. Never force-push.
 - No fresh CI pass is claimed for the documentation commits.
 
