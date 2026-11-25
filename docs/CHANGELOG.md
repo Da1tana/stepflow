@@ -5,6 +5,8 @@ This file is the chronological map of meaningful project changes. It complements
 ## 2026-11-25
 
 ### Recording core — first implementation slice
+- CI initially caught two test expectation issues: long token-like labels are intentionally blanked, and a sensitive button label is retained only as a generic action. Updated tests to assert those privacy behaviors.
+- Restricted-page validation is enforced when a recording session is created, with an explicit PDF-path regression test.
 - Added `src/core/privacy.js` for allowlisted descriptor sanitization and origin-only URL normalization.
 - Added `src/core/step-label.js` for localized Russian/English action labels.
 - Added `src/core/restricted-url.js` for browser-internal, store, local-file, malformed, and obvious PDF URL rejection.
