@@ -22,7 +22,8 @@ This file is the acceptance-test inventory. A feature is not considered verified
 | Successful reinjection resumes draft | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
 | Denied reinjection preserves paused draft | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
 | Tab close preserves captured steps | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
-| Real Chromium tab close preserves the draft paused | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Added; CI pending |
+| Browser tab close preserves draft in Chromium | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered; CI #74 passed |
+| Real Chromium tab close preserves the draft paused | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered; CI #74 passed |
 | Draft survives forced service-worker termination and restart | `tests/e2e/extension.e2e.mjs` + CDP helper in `tests/e2e/harness.mjs` | Chromium E2E | Added; CI pending |
 | Unrelated tabs do not affect recording | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
 | Manifest, permissions, paths and i18n validation | `scripts/validate.mjs` in CI | Static validation | Covered |
@@ -50,7 +51,7 @@ This file is the acceptance-test inventory. A feature is not considered verified
 
 ## CI test map
 
-The latest fully passing run #68 executed these steps successfully:
+The latest fully passing run #74 executed these steps successfully:
 
 1. `npm ci`
 2. Manifest, permission, path and i18n validation
@@ -60,7 +61,7 @@ The latest fully passing run #68 executed these steps successfully:
 6. Chromium E2E suite
 7. Screenshot and extension artifact uploads
 
-Run #68 reported 23/23 unit tests and 14/14 Chromium E2E tests passing. No local commands were run by the assistant. The CI result is evidence for this exact PR head only; new commits require a new CI run.
+Run #74 reported 23/23 unit tests and 16/16 Chromium E2E tests passing. It includes the real tab-close recovery scenario. No local commands were run by the assistant. The CI result is evidence for this exact PR head only; new commits require a new CI run.
 
 ## Acceptance gate for Recording MVP
 
