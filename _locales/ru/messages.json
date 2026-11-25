@@ -1,32 +1,95 @@
 {
-  "extName": { "message": "StepFlow — пошаговые инструкции" },
-  "extDescription": { "message": "Записывайте действия в браузере и превращайте их в понятные пошаговые инструкции со скриншотами." },
-  "actionTitle": { "message": "StepFlow" },
-  "commandOpenPopup": { "message": "Открыть StepFlow" },
-  "statusReady": { "message": "Готово" },
-  "statusStarting": { "message": "Запуск…" },
-  "statusRecording": { "message": "Идёт запись" },
-  "statusStartFailed": { "message": "Не удалось начать. Откройте обычную веб-страницу." },
-  "popupTagline": { "message": "Превращайте клики в понятные инструкции" },
-  "startRecording": { "message": "Начать запись" },
-  "openPanel": { "message": "Открыть боковую панель" },
-  "statGuides": { "message": "Инструкции" },
-  "statSteps": { "message": "Шаги" },
-  "shortcutHint": { "message": "Горячая клавиша" },
-  "navGuides": { "message": "Инструкции" },
-  "navSettings": { "message": "Настройки" },
-  "emptyTitle": { "message": "Инструкций пока нет" },
-  "emptyText": { "message": "Начните запись и выполните задачу как обычно — StepFlow соберёт пошаговую инструкцию." },
-  "howItWorks": { "message": "Как это работает" },
-  "step1Title": { "message": "Запись" },
-  "step1Text": { "message": "Нажмите «Начать запись» и выполните задачу." },
-  "step2Title": { "message": "Захват" },
-  "step2Text": { "message": "Поддерживаемые клики станут шагами инструкции." },
-  "step3Title": { "message": "Публикация" },
-  "step3Text": { "message": "Отредактируйте инструкцию и экспортируйте её." },
-  "settingsTitle": { "message": "Настройки" },
-  "settingsText": { "message": "Здесь появятся параметры записи и экспорта." },
-  "settingAutoScreenshot": { "message": "Делать скриншот на каждом шаге" },
-  "settingHighlightClicks": { "message": "Подсвечивать элементы при клике" },
-  "localOnly": { "message": "Все данные хранятся только на этом устройстве" }
+  "extName": {
+    "message": "StepFlow — пошаговые инструкции"
+  },
+  "extDescription": {
+    "message": "Записывайте действия в браузере и превращайте их в понятные пошаговые инструкции со скриншотами."
+  },
+  "actionTitle": {
+    "message": "StepFlow"
+  },
+  "commandOpenPopup": {
+    "message": "Открыть StepFlow"
+  },
+  "statusReady": {
+    "message": "Готово"
+  },
+  "statusStarting": {
+    "message": "Запуск…"
+  },
+  "statusRecording": {
+    "message": "Идёт запись"
+  },
+  "statusStartFailed": {
+    "message": "Не удалось начать. Откройте обычную веб-страницу."
+  },
+  "popupTagline": {
+    "message": "Превращайте клики в понятные инструкции"
+  },
+  "startRecording": {
+    "message": "Начать запись"
+  },
+  "openPanel": {
+    "message": "Открыть боковую панель"
+  },
+  "statGuides": {
+    "message": "Инструкции"
+  },
+  "statSteps": {
+    "message": "Шаги"
+  },
+  "shortcutHint": {
+    "message": "Горячая клавиша"
+  },
+  "navGuides": {
+    "message": "Инструкции"
+  },
+  "navSettings": {
+    "message": "Настройки"
+  },
+  "emptyTitle": {
+    "message": "Инструкций пока нет"
+  },
+  "emptyText": {
+    "message": "Начните запись и выполните задачу как обычно — StepFlow соберёт пошаговую инструкцию."
+  },
+  "howItWorks": {
+    "message": "Как это работает"
+  },
+  "step1Title": {
+    "message": "Запись"
+  },
+  "step1Text": {
+    "message": "Нажмите «Начать запись» и выполните задачу."
+  },
+  "step2Title": {
+    "message": "Захват"
+  },
+  "step2Text": {
+    "message": "Поддерживаемые клики станут шагами инструкции."
+  },
+  "step3Title": {
+    "message": "Публикация"
+  },
+  "step3Text": {
+    "message": "Отредактируйте инструкцию и экспортируйте её."
+  },
+  "settingsTitle": {
+    "message": "Настройки"
+  },
+  "settingsText": {
+    "message": "Здесь появятся параметры записи и экспорта."
+  },
+  "settingAutoScreenshot": {
+    "message": "Делать скриншот на каждом шаге"
+  },
+  "settingHighlightClicks": {
+    "message": "Подсвечивать элементы при клике"
+  },
+  "localOnly": {
+    "message": "Все данные хранятся только на этом устройстве"
+  },
+  "comingSoon": {
+    "message": "Скоро"
+  }
 }
