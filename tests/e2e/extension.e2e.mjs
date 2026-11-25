@@ -114,18 +114,21 @@ for (const locale of ['en-US', 'ru-RU']) {
       }, tabId);
 
       await target.close();
-      await app.serviceWorker.waitForFunction(async () => {
+      const { page, errors } = await app.openPage('src/sidepanel/sidepanel.html');
+      await page.waitForFunction(async () => {
         const { 'sf.recordingDraft': draft } = await chrome.storage.local.get('sf.recordingDraft');
         return draft?.status === 'paused' && draft.pauseReason === 'tab-closed';
       }, null, { timeout: 5_000 });
 
-      const { 'sf.recordingDraft': draft } = await app.serviceWorker.evaluate(() =>
+      const { 'sf.recordingDraft': draft } = await page.evaluate(() =>
         chrome.storage.local.get('sf.recordingDraft'),
       );
       assert.equal(draft.steps.length, 1);
       assert.equal(draft.steps[0].id, 'kept-step');
       assert.equal(draft.pauseReason, 'tab-closed');
-      await app.serviceWorker.evaluate(() => chrome.storage.local.remove('sf.recordingDraft'));
+      await page.evaluate(() => chrome.storage.local.remove('sf.recordingDraft'));
+      assert.deepEqual(errors, []);
+      await page.close();
     });
 
     test('side panel shows recording steps and can save or discard a draft', async () => {
