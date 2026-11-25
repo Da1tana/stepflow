@@ -11,7 +11,7 @@ function assertExtensionSender(sender) {
 export const recordingHandlers = {
   [MSG.RECORDING_START]: async (_payload, sender) => {
     assertExtensionSender(sender);
-    if (!sender.url?.startsWith(chrome.runtime.getURL(''))) {
+    if (sender.url !== chrome.runtime.getURL('src/popup/popup.html')) {
       throw new Error('Recording must be started from the StepFlow popup');
     }
 
