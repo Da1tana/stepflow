@@ -60,7 +60,6 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 - Service-worker termination/restart recovery E2E (new test, CI pending).
 - E2E coverage of a real browser-action popup start followed by trusted clicks on a fixture page.
 - End-to-end assertions that input values and password contents never reach local storage.
-- Service-worker restart recovery verification.
 - Screenshots, guide editor, and export.
 
 ## Privacy constraints
@@ -84,8 +83,8 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 
 ## Verification
 
-- CI run [#68](https://github.com/Da1tana/stepflow/actions/runs/45603907292) passed on exact branch HEAD `65351985a45b0c539cab40df40f81834124ca8d6`: dependency installation, static validation, 23/23 unit tests, Chromium installation, clean extension build, 14/14 Chromium E2E tests, screenshots, and build artifact upload.
-- Existing E2E verifies popup rendering/open-panel, side-panel state, draft save/cancel, storage-driven guide rendering, service-worker messaging, and real tab-close draft preservation in RU and EN. CI #74 passed 23/23 unit and 16/16 E2E tests. It does not yet exercise a real browser-action popup start followed by trusted clicks on a page.
+- CI run [#82](https://github.com/Da1tana/stepflow/actions/runs/45604755511) passed on implementation HEAD `4264601759430c3c86789354100d4328c650c726`: dependency installation, static validation, 23/23 unit tests, Chromium installation, clean extension build, 18/18 Chromium E2E tests, screenshots, and build artifact upload.
+- Existing E2E verifies popup rendering/open-panel, side-panel state, draft save/cancel, storage-driven guide rendering, service-worker messaging, and real tab-close draft preservation in RU and EN. CI #82 passed 23/23 unit and 18/18 E2E tests, including tab-close and forced service-worker restart recovery. It does not yet exercise a real browser-action popup start followed by trusted clicks on a page.
 - See [TEST_MAP.md](TEST_MAP.md) for the current test inventory and remaining acceptance gaps.
 - No local terminal execution is available in the current GitHub-only workflow.
 
@@ -93,5 +92,6 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 
 1. Add real popup-started trusted-click E2E and storage privacy assertions.
 2. Add Chromium lifecycle E2E for same-origin navigation, cross-origin denial, and tab closure.
-3. Verify draft persistence across service-worker termination/restart.
-4. Re-run CI and update the acceptance decision.
+3. Build browser-level coverage for real browser-action popup invocation, trusted click capture, and typed-value privacy canaries.
+4. Add real Chromium same-origin/cross-origin navigation recovery tests.
+5. Re-run CI and update the acceptance decision.
