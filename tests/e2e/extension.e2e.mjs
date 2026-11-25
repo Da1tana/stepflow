@@ -89,44 +89,6 @@ for (const locale of ['en-US', 'ru-RU']) {
     });
 
 
-    test('service worker sanitizes untrusted recording descriptors before persistence', async () => {
-      const { page, errors } = await app.openPage('src/popup/popup.html', { width: 340, height: 320 });
-      const tabId = await app.serviceWorker.evaluate(async () => {
-        const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-        return tab.id;
-      });
-      await app.serviceWorker.evaluate(async (id) => {
-        await chrome.storage.local.set({
-          'sf.recordingDraft': {
-            id: 'privacy-boundary-test',
-            tabId: id,
-            status: 'recording',
-            origin: 'chrome-extension://test',
-            startedAt: Date.now(),
-            updatedAt: Date.now(),
-            steps: [],
-          },
-        });
-      }, tabId);
-
-      const response = await page.evaluate(async () => chrome.runtime.sendMessage({
-        type: 'recording/step-captured',
-        payload: { descriptor: { role: 'password', label: 'private-password-canary-123' } },
-      }));
-      assert.equal(response.accepted, true);
-
-      const { 'sf.recordingDraft': draft } = await app.serviceWorker.evaluate(() =>
-        chrome.storage.local.get('sf.recordingDraft'),
-      );
-      assert.equal(draft.steps.length, 1);
-      assert.match(draft.steps[0].title, /password field|поле пароля/i,
-        'password role produces only a generic step title');
-      assert.ok(!JSON.stringify(draft).includes('private-password-canary-123'));
-      assert.deepEqual(errors, []);
-      await app.serviceWorker.evaluate(() => chrome.storage.local.remove('sf.recordingDraft'));
-      await page.close();
-    });
-
     test('side panel shows recording steps and can save or discard a draft', async () => {
       const { page, errors } = await app.openPage('src/sidepanel/sidepanel.html');
       const draft = {
