@@ -7,10 +7,11 @@ This document is the entry point for any AI assistant or developer continuing St
 StepFlow is a Manifest V3 browser extension that records user actions and turns them into step-by-step guides. The initial product direction is local-first: no backend, no remote code, no paid API dependency in the MVP.
 
 The current milestone is **Recording MVP without screenshots**:
-1. The user starts recording from the extension popup (or the configured action shortcut).
-2. StepFlow records safe descriptions of trusted user clicks.
-3. Steps appear in the side panel.
-4. The user stops and saves a guide locally, or cancels the draft.
+1. The user opens the extension popup (this explicit invocation grants temporary `activeTab` access to the active tab).
+2. The user starts recording; StepFlow injects a recorder using `chrome.scripting`.
+3. StepFlow records safe descriptions of trusted user clicks.
+4. Steps appear in the side panel.
+5. The user stops and saves a guide locally, or cancels the draft.
 
 Screenshots, guide editing, and export are later milestones.
 
@@ -65,10 +66,11 @@ An assistant using the GitHub integration may be able to read and write reposito
 Verified on 2026-11-25:
 - PR #1 (foundation) is merged into `main`.
 - PR [#2](https://github.com/Da1tana/stepflow/pull/2) is an open draft for documentation and the Recording MVP plan; it is not merged.
-- `feat/recording-mvp` contains documentation and the technical plan; the recording implementation is not present yet.
-- The feature branch is diverged from `main`; re-run GitHub compare immediately before any branch operation. Its reported file diff contains documentation only.
-- PR #2 reports `mergeable: false`; re-check GitHub's current mergeability and resolve the branch sync through a normal merge/update-branch operation. Never force-push.
-- No fresh CI pass is claimed for the documentation commits.
+- `feat/recording-mvp` is synchronized with `main`: compare reports 16 commits ahead, 0 behind. The merge base is the current `main` commit.
+- PR #2's changed-file diff contains six documentation files only; no source-code implementation changes are present.
+- The branch synchronization was recorded as a normal two-parent merge commit; no force-push or history rewrite was used.
+- Chrome API research is recorded in `docs/DECISIONS.md` and `docs/plans/recording-mvp.md`.
+- No fresh successful CI run is claimed for the current branch.
 
 ## Definition of done for every implementation stage
 
