@@ -28,6 +28,7 @@ This file is the acceptance-test inventory. A feature is not considered verified
 | Side panel displays a controlled draft and saves/cancels it | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered |
 | Guide list updates from storage and renders titles as text | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered |
 | Service worker responds to app message | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered |
+| Service worker sanitizes a password-role descriptor before persistence | `tests/e2e/extension.e2e.mjs` | Chromium E2E via extension page message | Added; CI pending |
 | English and Russian UI smoke tests | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered |
 
 ## Outstanding acceptance tests
@@ -36,7 +37,7 @@ This file is the acceptance-test inventory. A feature is not considered verified
 |---|---|---|---|
 | P0 | Start recording from the real browser-action popup on an ordinary web tab | Popup user gesture grants temporary access; service worker injects recorder into the intended active tab | Not covered |
 | P0 | Capture a real trusted click | A real page click creates exactly one safe step in the active draft | Not covered |
-| P0 | Sensitive inputs are never persisted | Type unique canary values into text, email, password and textarea controls; click supported controls; inspect all relevant local storage and guide data for canaries | Not covered |
+| P0 | Sensitive inputs are never persisted | Type unique canary values into text, email, password and textarea controls; click supported controls; inspect all relevant local storage and guide data for canaries | Not covered; worker-side sanitizer has a narrower E2E that injects a canary as a password-role label, but this does not exercise actual typing or the content script |
 | P0 | Content-script privacy boundary | Confirm captured descriptor contains only allowed role/label fields and no value, selector, text, HTML or URL | Partially covered by code review and unit tests; no browser assertion |
 | P1 | Same-origin navigation | Navigate within same origin; draft pauses, recorder is reinjected, recording resumes once | Unit behavior covered; real Chromium E2E not covered |
 | P1 | Cross-origin navigation | Navigate to another origin; reinjection denial leaves draft paused and preserves existing steps | Mocked denial covered; real Chromium E2E not covered |
