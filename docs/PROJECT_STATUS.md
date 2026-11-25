@@ -44,7 +44,7 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 - Manifest permissions: `sidePanel`, `storage`, `activeTab`, and `scripting`. No persistent host permissions, `tabs` permission, or static content scripts.
 - Popup starts recording after explicit user invocation and requests the side panel.
 - `src/content/recorder.js` captures only trusted clicks on a limited allowlist of interactive elements.
-- The content script never reads field values, form contents, page text, HTML, or selectors. For eligible non-input controls it considers only explicit `aria-label` / `title` metadata.
+- The content script never reads field values, form contents, page text, HTML, or selectors. For eligible non-input controls it considers only explicit `aria-label` / `title` metadata. `tests/unit/recorder.test.mjs` now guards these boundaries with a fake DOM harness; real browser capture remains a separate acceptance gap.
 - Service-worker handlers validate extension sender, top-frame/tab identity, active session tab, and sanitize descriptors again.
 - One active draft is persisted under `sf.recordingDraft` in `chrome.storage.local`.
 - Application state exposes the recording draft.
