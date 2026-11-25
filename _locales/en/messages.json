@@ -3,7 +3,7 @@
     "message": "StepFlow — step-by-step guides"
   },
   "extDescription": {
-    "message": "Record your actions in the browser and turn them into clear step-by-step guides with screenshots."
+    "message": "Record supported browser actions and turn them into clear step-by-step guides."
   },
   "actionTitle": {
     "message": "StepFlow"
@@ -51,7 +51,7 @@
     "message": "No guides yet"
   },
   "emptyText": {
-    "message": "Start a recording, walk through your process, and StepFlow will build a guide with screenshots for every step."
+    "message": "Start a recording and perform your task as usual. StepFlow will collect supported clicks into a draft you can review."
   },
   "howItWorks": {
     "message": "How it works"
@@ -66,13 +66,13 @@
     "message": "Capture"
   },
   "step2Text": {
-    "message": "Every click becomes a step with a screenshot."
+    "message": "Supported clicks become steps in your draft guide."
   },
   "step3Title": {
     "message": "Share"
   },
   "step3Text": {
-    "message": "Edit the guide and export it."
+    "message": "Review the steps and save your guide."
   },
   "settingsTitle": {
     "message": "Settings"
