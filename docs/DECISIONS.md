@@ -1,5 +1,20 @@
 # StepFlow decision log
 
+## 2026-11-25 — Verify MV3 service-worker restart with CDP
+
+**Status:** implemented and passing in Chromium CI run #82
+
+**Decision:**
+- Use Playwright's browser-level CDP session to locate the StepFlow `service_worker` target and close it with `Target.closeTarget`.
+- Confirm the original target ID disappears from `Target.getTargets` before sending a wake-up message.
+- Trigger the worker through the existing extension message path and verify that the persisted recording draft is still readable from `chrome.storage.local`.
+- Reuse the existing Playwright Worker handle for the post-restart storage assertion; Playwright may preserve that handle across service-worker suspension/restart rather than emitting a new `serviceworker` event.
+
+**Rationale:** Verify actual worker termination and recovery without adding test-only extension permissions or relying on arbitrary idle timers.
+
+**Validation:** `tests/e2e/extension.e2e.mjs` passed in CI #82 (18/18 Chromium E2E, 23/23 unit tests).
+
+
 ## 2026-11-25 — Preserve recording drafts across tab lifecycle events
 
 **Status:** implemented; unit-tested with mocked Chrome APIs; real Chromium E2E still required
