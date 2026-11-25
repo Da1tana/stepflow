@@ -67,7 +67,7 @@ test('recorder ignores untrusted clicks and captures only explicit button metada
   assert.equal(app.messages.length, 0, 'script-generated clicks are ignored');
 
   app.click({ isTrusted: true, target: button });
-  assert.deepEqual(app.messages, [{
+  assert.deepEqual(JSON.parse(JSON.stringify(app.messages)), [{
     type: 'recording/step-captured',
     payload: { descriptor: { role: 'button', label: 'Save changes' } },
   }]);
@@ -86,7 +86,7 @@ test('recorder never reads or sends password, text, email or textarea values', (
     app.click({ isTrusted: true, target: app.createElement(tag, attrs) });
   }
 
-  assert.deepEqual(app.messages.map((message) => message.payload.descriptor), [
+  assert.deepEqual(JSON.parse(JSON.stringify(app.messages.map((message) => message.payload.descriptor))), [
     { role: 'password', label: '' },
     { role: 'textbox', label: '' },
     { role: 'textbox', label: '' },
