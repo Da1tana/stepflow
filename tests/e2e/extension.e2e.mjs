@@ -105,11 +105,10 @@ for (const locale of ['en-US', 'ru-RU']) {
 
       await app.stopServiceWorker();
 
-      const restartedWorkerPromise = app.context.waitForEvent('serviceworker', { timeout: 5_000 });
       const pong = await page.evaluate(() => chrome.runtime.sendMessage({ type: 'app/ping' }));
       assert.equal(pong.ok, true, 'service worker responds after it is restarted');
-      const restartedWorker = await restartedWorkerPromise;
-      const { 'sf.recordingDraft': persisted } = await restartedWorker.evaluate(() =>
+      // Playwright keeps the extension Worker handle stable across suspension/restart.
+      const { 'sf.recordingDraft': persisted } = await app.serviceWorker.evaluate(() =>
         chrome.storage.local.get('sf.recordingDraft'),
       );
       assert.equal(persisted.id, 'worker-restart-e2e');
