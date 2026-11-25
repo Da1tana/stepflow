@@ -4,16 +4,18 @@ Last verified: 2026-11-25
 
 ## Product summary
 
-StepFlow is a local-first Manifest V3 browser extension intended to record browser actions and turn them into step-by-step instructions with screenshots. The current repository version is the foundation; the recording feature is the next implementation milestone.
+StepFlow is a local-first Manifest V3 browser extension intended to record browser actions and turn them into step-by-step instructions with screenshots. The current product baseline is the foundation; recording is the next implementation milestone.
 
 ## Repository state
 
 - Repository: [Da1tana/stepflow](https://github.com/Da1tana/stepflow)
 - Default branch: `main`
 - Foundation PR: [#1 — Фундамент расширения StepFlow на Manifest V3](https://github.com/Da1tana/stepflow/pull/1) — merged.
-- Active recording plan branch: `feat/recording-mvp`.
-- The feature branch currently contains the recording plan and handoff documentation work; it does not yet contain the Recording MVP implementation.
-- At the last comparison, `feat/recording-mvp` was **diverged** from `main`: one commit ahead and one behind. The ahead commit adds `docs/plans/recording-mvp.md`; the behind commit is the foundation merge commit now on `main`. Reconcile the branch before substantial implementation. Do not force-push.
+- Active workstream: `feat/recording-mvp`.
+- Latest comparison observed after documentation commits: **4 commits ahead, 1 commit behind** `main` (diverged).
+- The feature branch's changes relative to the merge base are documentation only: the recording plan plus project handoff/status/roadmap/change-log/decision-log documents. No source-code implementation changes are reported in the compare result.
+- Synchronization with `main` is pending. No force-push or history rewrite has been performed.
+- No open PR was found at the time of this check.
 
 ## Implemented in main
 
@@ -41,33 +43,43 @@ The current manifest permissions are `sidePanel` and `storage`. There are no hos
 - Live step display and stop/cancel flows in the popup and side panel.
 - Navigation, tab-close, and service-worker restart recovery.
 - Recording-specific unit and E2E tests.
-
-Screenshots, guide editor, and export are also not implemented.
+- Screenshots, guide editor, and export.
 
 ## Recording MVP plan
 
-The detailed plan is in [plans/recording-mvp.md](plans/recording-mvp.md). Its key constraints are:
+The detailed technical draft is in [plans/recording-mvp.md](plans/recording-mvp.md). It proposes:
 
-- Add only `activeTab` and `scripting` for the MVP; do not add broad host permissions, `tabs`, `webNavigation`, or static content scripts.
-- Start recording from the popup/action gesture, not from a side-panel click alone.
+- Add only `activeTab` and `scripting` for the MVP; do not add broad host permissions, `tabs`, `webNavigation`, or static content scripts without a documented need.
+- Start recording from a popup/action user gesture, not from a side-panel click alone.
 - Pause when navigation leaves the granted origin and require the user to grant access again.
 - Capture only trusted click events and safe element descriptors.
 - Never collect form values, passwords, page HTML/text, document title, URL query, or URL fragment.
 - Persist session state in extension storage so service-worker suspension does not lose it.
 - Support one active recording session and the main frame only.
 
-The plan is a technical plan, not evidence that these behaviors have been implemented or tested in the current product.
+**Important:** the plan is not yet implementation approval. Before coding, verify the Chrome API details for tab lifecycle events without the `tabs` permission, user-gesture requirements for `sidePanel.open`, and the exact re-grant flow. The open questions are tracked in [DECISIONS.md](DECISIONS.md).
+
+## Project map / source of truth
+
+- [AI_HANDOFF.md](AI_HANDOFF.md) — instructions for any AI/developer continuing the project.
+- [PROJECT_STATUS.md](PROJECT_STATUS.md) — this verified status.
+- [ROADMAP.md](ROADMAP.md) — milestone sequence and acceptance criteria.
+- [CHANGELOG.md](CHANGELOG.md) — chronological record of meaningful changes.
+- [DECISIONS.md](DECISIONS.md) — decisions, rationale, and unresolved technical questions.
+- [plans/recording-mvp.md](plans/recording-mvp.md) — detailed recording proposal.
+- [ARCHITECTURE.md](ARCHITECTURE.md) — current architecture.
 
 ## Existing checks and verification
 
 The merged PR #1 description reports that the foundation's validation, unit tests (3/3), and E2E tests (12/12) passed at the time of that PR. This is historical evidence for the foundation PR, not a fresh run against the current feature branch.
 
-No new test run is claimed by this status document. Check the latest GitHub Actions run before relying on CI status.
+The documentation commits were saved and the added files were read back from GitHub. The GitHub combined-status query for the latest documentation commit returned no status entries. No fresh local test run or successful CI run is claimed.
 
 ## Immediate next actions
 
-1. Safely reconcile `feat/recording-mvp` with the latest `main`.
-2. Review the recording plan against the actual foundation code and update it if necessary.
-3. Implement the smallest vertical slice: permission-safe start, trusted click capture, validated step persistence, and visible step list.
-4. Add unit and E2E coverage with privacy assertions.
-5. Verify CI and update this status document before opening/updating the PR.
+1. Synchronize `feat/recording-mvp` with the latest `main` using a normal merge/update-branch operation; never force-push.
+2. Verify the open technical questions in [DECISIONS.md](DECISIONS.md) against official Chromium documentation and a reproducible test.
+3. Review and finalize the recording plan against the actual foundation code.
+4. Implement a small vertical slice: permission-safe start, trusted click capture, validated step persistence, and visible step list.
+5. Add unit and E2E coverage with privacy assertions.
+6. Verify CI, update this status and changelog, and keep the work in a reviewable PR. Do not merge without the repository owner's approval.
