@@ -54,6 +54,23 @@ export async function launchWithExtension({ headless = !process.env.HEADED, user
     return { page, errors };
   }
 
+  async function openActionPopup() {
+    if (typeof chrome === 'undefined') throw new Error('This helper must run in the test process');
+    const popupPromise = context.waitForEvent('page', { timeout: 5_000 });
+    await serviceWorker.evaluate(async () => {
+      if (typeof chrome.action.openPopup !== 'function') {
+        throw new Error('chrome.action.openPopup is unavailable in this Chromium build');
+      }
+      await chrome.action.openPopup();
+    });
+    const page = await popupPromise;
+    const errors = [];
+    page.on('pageerror', (err) => errors.push(err.message));
+    page.on('console', (msg) => msg.type() === 'error' && errors.push(msg.text()));
+    await page.waitForLoadState('domcontentloaded');
+    return { page, errors };
+  }
+
   async function stopServiceWorker() {
     const browser = context.browser();
     if (!browser) throw new Error('Persistent Chromium browser is unavailable');
@@ -82,5 +99,5 @@ export async function launchWithExtension({ headless = !process.env.HEADED, user
     }
   }
 
-  return { context, serviceWorker, extensionId, openPage, stopServiceWorker };
+  return { context, serviceWorker, extensionId, openPage, openActionPopup, stopServiceWorker };
 }
