@@ -20,9 +20,11 @@ This file is the chronological map of meaningful project changes. It complements
 - Added `docs/ROADMAP.md`: milestone sequence and acceptance criteria.
 - Added `docs/CHANGELOG.md`: this chronological map.
 - Added `docs/DECISIONS.md`: decisions and open technical questions.
+- Updated the recording plan with explicit API, user-gesture, and privacy verification gates.
 
-### Branch state after documentation commits
-- `feat/recording-mvp` is 4 commits ahead of and 1 commit behind `main` according to GitHub compare.
-- The ahead changes are the recording plan and project documentation; compare reports no source-code changes.
-- Branch synchronization is still pending. No force-push or history rewrite was performed.
-- No fresh CI/test result is claimed for these documentation commits.
+### Documentation PR opened
+- Opened [PR #2](https://github.com/Da1tana/stepflow/pull/2), draft, targeting `main`.
+- PR contains documentation only; no source-code implementation changes.
+- GitHub compare: `feat/recording-mvp` is 10 commits ahead and 1 commit behind `main`; the changed-file diff is six documentation files.
+- PR #2 reported `mergeable: false` at creation. Branch synchronization remains unresolved and must be handled without force-push.
+- Latest combined-status query returned no status entries; no fresh CI pass is claimed.
