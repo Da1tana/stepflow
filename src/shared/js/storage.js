@@ -35,6 +35,16 @@ export async function setRecordingDraft(draft) {
   return draft;
 }
 
+/** Atomically save a completed guide and clear its source draft. */
+export async function saveGuideFromRecording(guide) {
+  const guides = await getGuides();
+  await area().set({
+    [STORAGE_KEYS.GUIDES]: [...guides, guide],
+    [STORAGE_KEYS.RECORDING_DRAFT]: null,
+  });
+  return guide;
+}
+
 /**
  * Initialise / migrate storage. Called once from the service worker
  * on install and update.
