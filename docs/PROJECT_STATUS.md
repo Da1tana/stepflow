@@ -37,7 +37,7 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 - `src/core/step-label.js`: Russian and English action titles.
 - `src/core/restricted-url.js`: rejects browser-internal pages, Chrome Web Store, local files, malformed/non-web URLs, and obvious PDF paths.
 - `src/core/recording.js`: serializable session creation and immutable append/pause/resume/stop/cancel transitions.
-- Four unit-test files cover privacy, labels, URL restrictions, and session state.
+- Unit tests cover privacy, labels, URL restrictions, recording transitions, guide conversion, and recording lifecycle recovery.
 
 ### First browser-integration slice
 
@@ -51,6 +51,8 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 - Side panel displays live steps and exposes finish/save and cancel actions.
 - Finishing a non-empty recording converts it into a local guide; guide persistence and draft clearing are written together in one storage update.
 - Cancelling clears the draft without creating a guide.
+- Tab lifecycle coordinator pauses a draft on navigation start, attempts recorder reinjection after completion, resumes only after successful injection, and preserves the paused draft if access is denied.
+- Closing the recorded tab preserves the draft in a paused state.
 
 ## Not implemented yet
 
@@ -81,7 +83,7 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 
 ## Verification
 
-- CI run [#59](https://github.com/Da1tana/stepflow/actions/runs/45602679182) passed on the latest verified branch head: dependency installation, static validation, unit tests, Chromium installation, clean extension build, Chromium E2E, screenshots, and build artifact upload.
+- CI run [#68](https://github.com/Da1tana/stepflow/actions/runs/45603907292) passed on exact branch HEAD `65351985a45b0c539cab40df40f81834124ca8d6`: dependency installation, static validation, 23/23 unit tests, Chromium installation, clean extension build, 14/14 Chromium E2E tests, screenshots, and build artifact upload.
 - Existing E2E verifies popup rendering/open-panel, side-panel state, draft save/cancel, storage-driven guide rendering, and service-worker messaging in RU and EN. It does not yet exercise a real browser-action popup start followed by trusted clicks on a page.
 - See [TEST_MAP.md](TEST_MAP.md) for the current test inventory and remaining acceptance gaps.
 - No local terminal execution is available in the current GitHub-only workflow.
