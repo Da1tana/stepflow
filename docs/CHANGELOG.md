@@ -5,6 +5,9 @@ This file is the chronological map of meaningful project changes. It complements
 ## 2026-11-25
 
 ### Verification map and status reconciliation
+- Added Chromium E2E coverage for closing the recorded tab and preserving the draft paused with captured steps.
+- Added a CDP-based test helper and Chromium E2E scenario that terminates the extension service worker, wakes it with a message, and verifies the draft survives in `chrome.storage.local`.
+- Both lifecycle E2E additions are pending CI verification.
 - Added a real Chromium E2E that closes the recorded tab and asserts the saved draft remains paused with its captured steps intact; CI pending.
 - CI run [#68](https://github.com/Da1tana/stepflow/actions/runs/45603907292) passed on exact PR head `65351985`: static validation, 23/23 unit tests, clean package build, 14/14 Chromium E2E tests, and artifact uploads.
 - Reconciled project status and handoff notes with the implemented tab lifecycle coordinator and its mocked-API unit tests.
