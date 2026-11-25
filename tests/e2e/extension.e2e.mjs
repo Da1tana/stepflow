@@ -89,6 +89,40 @@ for (const locale of ['en-US', 'ru-RU']) {
     });
 
 
+    test('recording draft survives service worker termination and restart', async () => {
+      const { page, errors } = await app.openPage('src/sidepanel/sidepanel.html');
+      const draft = {
+        id: 'worker-restart-e2e',
+        tabId: 7,
+        status: 'paused',
+        pauseReason: 'navigation',
+        origin: 'https://example.test',
+        startedAt: 1,
+        updatedAt: 2,
+        steps: [{ id: 'persisted-step', index: 1, title: 'Click safe action', createdAt: 1 }],
+      };
+      await page.evaluate((value) => chrome.storage.local.set({ 'sf.recordingDraft': value }), draft);
+
+      const workerClosed = app.serviceWorker.waitForEvent('close', { timeout: 5_000 });
+      await app.stopServiceWorker();
+      await workerClosed;
+
+      const restartedWorkerPromise = app.context.waitForEvent('serviceworker', { timeout: 5_000 });
+      const pong = await page.evaluate(() => chrome.runtime.sendMessage({ type: 'app/ping' }));
+      assert.equal(pong.ok, true, 'service worker responds after it is restarted');
+      const restartedWorker = await restartedWorkerPromise;
+      const { 'sf.recordingDraft': persisted } = await restartedWorker.evaluate(() =>
+        chrome.storage.local.get('sf.recordingDraft'),
+      );
+      assert.equal(persisted.id, 'worker-restart-e2e');
+      assert.equal(persisted.steps.length, 1);
+      assert.equal(persisted.steps[0].id, 'persisted-step');
+      assert.equal(persisted.pauseReason, 'navigation');
+      assert.deepEqual(errors, []);
+      await page.evaluate(() => chrome.storage.local.remove('sf.recordingDraft'));
+      await page.close();
+    });
+
     test('closing the recorded browser tab preserves its draft as paused', async () => {
       const target = await app.context.newPage();
       await target.goto('about:blank');
