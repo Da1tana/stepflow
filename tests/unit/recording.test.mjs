@@ -17,6 +17,7 @@ test('creates a serializable session with only the page origin', () => {
 test('rejects invalid tabs and unsupported URLs', () => {
   assert.throws(() => createRecordingSession({ tabId: -1, pageUrl: 'https://example.com' }));
   assert.throws(() => createRecordingSession({ tabId: 1, pageUrl: 'chrome://settings' }));
+  assert.throws(() => createRecordingSession({ tabId: 1, pageUrl: 'https://example.com/guide.pdf' }));
 });
 
 test('appends safe steps immutably and drops sensitive labels', () => {

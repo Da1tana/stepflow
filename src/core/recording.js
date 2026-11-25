@@ -1,4 +1,5 @@
 import { formatStepTitle } from './step-label.js';
+import { isRestrictedUrl } from './restricted-url.js';
 import { safePageOrigin, sanitizeElementDescriptor } from './privacy.js';
 
 const uid = () => globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -6,6 +7,7 @@ const uid = () => globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.ran
 /** Create a serializable recording session. */
 export function createRecordingSession({ tabId, pageUrl, now = Date.now() }) {
   if (!Number.isInteger(tabId) || tabId < 0) throw new TypeError('A valid tabId is required');
+  if (isRestrictedUrl(pageUrl)) throw new TypeError('This page cannot be recorded');
   const origin = safePageOrigin(pageUrl);
   if (!origin) throw new TypeError('A supported http(s) page is required');
   return {
