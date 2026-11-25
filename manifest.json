@@ -36,5 +36,5 @@
       "description": "__MSG_commandOpenPopup__"
     }
   },
-  "permissions": ["sidePanel", "storage"]
+  "permissions": ["sidePanel", "storage", "activeTab", "scripting"]
 }
