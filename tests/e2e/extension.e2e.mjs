@@ -89,6 +89,64 @@ for (const locale of ['en-US', 'ru-RU']) {
     });
 
 
+    test('real action popup records trusted clicks without storing input values', async () => {
+      const target = await app.context.newPage();
+      await target.route('https://stepflow.test/**', (route) => route.fulfill({
+        status: 200,
+        contentType: 'text/html',
+        body: `<!doctype html>
+          <html><body>
+            <label>Email <input id="email" type="email"></label>
+            <label>Password <input id="password" type="password"></label>
+            <label>Notes <textarea id="notes"></textarea></label>
+            <button id="safe-action" aria-label="Save safe record">Save</button>
+          </body></html>`,
+      }));
+      await target.goto('https://stepflow.test/fixture');
+
+      // Open the actual browser-action popup, not popup.html as a normal tab.
+      // This is the user-facing extension invocation that grants activeTab.
+      const popupPromise = app.context.waitForEvent('page', { timeout: 10_000 });
+      await app.serviceWorker.evaluate(async () => {
+        if (typeof chrome.action.openPopup !== 'function') {
+          throw new Error('chrome.action.openPopup is unavailable in this Chromium build');
+        }
+        await chrome.action.openPopup();
+      });
+      const popup = await popupPromise;
+      await popup.waitForSelector('#start-recording:not([disabled])');
+      await popup.click('#start-recording');
+
+      await target.fill('#email', 'private-canary@example.test');
+      await target.fill('#password', 'private-password-canary-123');
+      await target.fill('#notes', 'private-notes-canary-456');
+      await target.click('#safe-action');
+
+      await app.serviceWorker.waitForFunction(async () => {
+        const { 'sf.recordingDraft': draft } = await chrome.storage.local.get('sf.recordingDraft');
+        return draft?.steps?.length === 1;
+      }, null, { timeout: 5_000 });
+
+      const { 'sf.recordingDraft': draft } = await app.serviceWorker.evaluate(() =>
+        chrome.storage.local.get('sf.recordingDraft'),
+      );
+      assert.equal(draft.status, 'recording');
+      assert.equal(draft.steps.length, 1);
+      assert.deepEqual(draft.steps[0].descriptor, { role: 'button', label: 'Save safe record' });
+      const persisted = JSON.stringify(await app.serviceWorker.evaluate(() => chrome.storage.local.get(null)));
+      assert.ok(!persisted.includes('private-canary@example.test'), 'email value is never stored');
+      assert.ok(!persisted.includes('private-password-canary-123'), 'password value is never stored');
+      assert.ok(!persisted.includes('private-notes-canary-456'), 'textarea value is never stored');
+
+      const { page: panel } = await app.openPage('src/sidepanel/sidepanel.html');
+      await panel.waitForSelector('#recording-card:not([hidden])');
+      await panel.click('#cancel-recording');
+      await panel.waitForFunction(() => document.getElementById('recording-card').hidden);
+      await panel.close();
+      await target.close();
+      assert.deepEqual([], []);
+    });
+
     test('side panel shows recording steps and can save or discard a draft', async () => {
       const { page, errors } = await app.openPage('src/sidepanel/sidepanel.html');
       const draft = {
