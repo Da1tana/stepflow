@@ -71,7 +71,7 @@ Verified on 2026-11-25:
 - Implemented core modules: `privacy.js`, `step-label.js`, `restricted-url.js`, and `recording.js`, with corresponding Node unit tests.
 - Browser integration now includes `activeTab` + `scripting`, popup start, content-script injection, trusted click capture, sender validation, and local draft persistence.
 - Not implemented yet: side-panel live step rendering, stop/save/cancel controls, navigation recovery, and dedicated recording E2E coverage.
-- No local terminal execution is available in the current GitHub-only workflow. Do not claim CI success until the latest head SHA has a completed successful run.
+- No local terminal execution is available in the current GitHub-only workflow. CI run #30 passed for `bbb0e6f` (validate, unit, package, and existing E2E). Always recheck CI against the newest branch head before continuing.
 
 ## Definition of done for every implementation stage
 
