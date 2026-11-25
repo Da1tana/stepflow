@@ -8,6 +8,7 @@ This file is the chronological map of meaningful project changes. It complements
 - Reconciled project status and handoff notes with the implemented tab lifecycle coordinator and its mocked-API unit tests.
 - Recorded CI run #59 as passing on the latest verified branch head.
 - Added a dedicated test map separating verified unit/E2E coverage from outstanding real-browser acceptance scenarios.
+- Added a Chromium E2E for the service-worker sanitization boundary: a password-role descriptor containing a canary label must persist only as a generic password-step title. This is not a substitute for real form typing or a browser-action invocation test; CI is pending.
 
 
 ### Recording navigation and tab-close recovery
