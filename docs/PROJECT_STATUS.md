@@ -56,7 +56,8 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 
 ## Not implemented yet
 
-- Real Chromium verification of navigation reinjection, cross-origin pause/recovery, and tab closure.
+- Real Chromium verification of navigation reinjection and cross-origin pause/recovery.
+- Service-worker termination/restart recovery E2E (new test, CI pending).
 - E2E coverage of a real browser-action popup start followed by trusted clicks on a fixture page.
 - End-to-end assertions that input values and password contents never reach local storage.
 - Service-worker restart recovery verification.
@@ -84,7 +85,7 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 ## Verification
 
 - CI run [#68](https://github.com/Da1tana/stepflow/actions/runs/45603907292) passed on exact branch HEAD `65351985a45b0c539cab40df40f81834124ca8d6`: dependency installation, static validation, 23/23 unit tests, Chromium installation, clean extension build, 14/14 Chromium E2E tests, screenshots, and build artifact upload.
-- Existing E2E verifies popup rendering/open-panel, side-panel state, draft save/cancel, storage-driven guide rendering, and service-worker messaging in RU and EN. It does not yet exercise a real browser-action popup start followed by trusted clicks on a page.
+- Existing E2E verifies popup rendering/open-panel, side-panel state, draft save/cancel, storage-driven guide rendering, service-worker messaging, and real tab-close draft preservation in RU and EN. CI #74 passed 23/23 unit and 16/16 E2E tests. It does not yet exercise a real browser-action popup start followed by trusted clicks on a page.
 - See [TEST_MAP.md](TEST_MAP.md) for the current test inventory and remaining acceptance gaps.
 - No local terminal execution is available in the current GitHub-only workflow.
 
