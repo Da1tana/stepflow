@@ -36,7 +36,9 @@ Delivered in merged [PR #1](https://github.com/Da1tana/stepflow/pull/1).
 - Side panel displays steps live.
 - Finish/save converts a non-empty stopped recording into a local guide; guide and draft updates are persisted together.
 - Cancel discards the current draft without creating a guide.
-- Remaining: handle same-origin navigation, cross-origin pause/resume, restricted pages, tab close, and service-worker restart.
+- Implemented lifecycle response: pause on navigation loading, attempt recorder reinjection after completion, resume only after successful injection, and retain a paused draft when access is denied.
+- Tab closure preserves the draft in a paused state so already captured steps remain saveable.
+- Unit tests cover lifecycle transitions with mocked Chrome APIs. Remaining: real Chromium E2E for same-origin reinjection, cross-origin pause, tab close, and service-worker restart.
 - E2E now covers side-panel display, save and cancel using a controlled draft fixture. Remaining: real popup-started trusted click capture and assertions that typed values/passwords never enter storage.
 
 ### Acceptance criteria
