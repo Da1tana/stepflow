@@ -47,11 +47,14 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 - Service-worker handlers validate extension sender, top-frame/tab identity, active session tab, and sanitize descriptors again.
 - One active draft is persisted under `sf.recordingDraft` in `chrome.storage.local`.
 - Application state exposes the recording draft.
+- Side panel displays live steps and exposes finish/save and cancel actions.
+- Finishing a non-empty recording converts it into a local guide; guide persistence and draft clearing are written together in one storage update.
+- Cancelling clears the draft without creating a guide.
 
 ## Not implemented yet
 
-- Live step display in the side panel.
-- Stop and save a guide; cancel and discard a draft.
+- Navigation and restart recovery for active recordings.
+- Dedicated E2E coverage for starting a real recording from the popup and trusted page clicks.
 - Same-origin navigation reinjection and cross-origin pause/recovery.
 - Tab-close and service-worker restart recovery.
 - Dedicated recording E2E tests for real trusted clicks and privacy boundaries.
@@ -67,6 +70,7 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 
 ## Project map / source of truth
 
+- [PRODUCT_OVERVIEW.ru.md](PRODUCT_OVERVIEW.ru.md) — user-facing product explanation and target audience.
 - [AI_HANDOFF.md](AI_HANDOFF.md) — instructions for any AI/developer continuing the project.
 - [PROJECT_STATUS.md](PROJECT_STATUS.md) — this verified status.
 - [ROADMAP.md](ROADMAP.md) — milestone sequence and acceptance criteria.
@@ -78,6 +82,7 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 ## Verification
 
 - CI run [#30](https://github.com/Da1tana/stepflow/actions/runs/45593035127) for browser-integration commit `bbb0e6f` passed: manifest/permissions/i18n validation, unit tests, Chromium installation, clean package build, and existing Chromium E2E suite.
+- The side-panel save/cancel slice is newer than run #30; its unit/E2E and CI status must be checked against the latest head before calling it verified.
 - The E2E suite verifies the existing popup/panel flows and localization. Dedicated real-click recording/privacy E2E tests are still outstanding.
 - No local terminal execution is available in the current GitHub-only workflow.
 
