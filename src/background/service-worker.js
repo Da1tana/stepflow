@@ -8,11 +8,21 @@ import { createRouter } from '../shared/js/messaging.js';
 import { initStorage } from '../shared/js/storage.js';
 import { appHandlers } from './handlers/app.js';
 import { recordingHandlers } from './handlers/recording.js';
+import { registerRecordingLifecycle } from './recording-lifecycle.js';
+import { getRecordingDraft, setRecordingDraft } from '../shared/js/storage.js';
 
 const log = createLogger('sw');
 const router = createRouter({ ...appHandlers, ...recordingHandlers }, log);
 
 chrome.runtime.onMessage.addListener(router);
+
+registerRecordingLifecycle({
+  tabs: chrome.tabs,
+  scripting: chrome.scripting,
+  getDraft: getRecordingDraft,
+  setDraft: setRecordingDraft,
+  logger: log,
+});
 
 chrome.runtime.onInstalled.addListener(async ({ reason }) => {
   await initStorage();
