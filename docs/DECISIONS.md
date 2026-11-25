@@ -13,7 +13,7 @@
 
 ## 2026-11-25 — First browser-integration permission boundary
 
-**Status:** implemented on `feat/recording-mvp`; CI verification pending
+**Status:** implemented and verified by CI run [#48](https://github.com/Da1tana/stepflow/actions/runs/45595528199)
 
 **Decision:** Use `activeTab` and `scripting` only. Start recording from the explicit extension popup action, then inject one recorder file into the active tab. Do not add persistent host permissions, the `tabs` permission, or static content scripts.
 
