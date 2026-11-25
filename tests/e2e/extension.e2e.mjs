@@ -119,7 +119,8 @@ for (const locale of ['en-US', 'ru-RU']) {
         chrome.storage.local.get('sf.recordingDraft'),
       );
       assert.equal(draft.steps.length, 1);
-      assert.deepEqual(draft.steps[0].descriptor, { role: 'password', label: '' });
+      assert.match(draft.steps[0].title, /password field|поле пароля/i,
+        'password role produces only a generic step title');
       assert.ok(!JSON.stringify(draft).includes('private-password-canary-123'));
       assert.deepEqual(errors, []);
       await app.serviceWorker.evaluate(() => chrome.storage.local.remove('sf.recordingDraft'));
