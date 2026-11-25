@@ -112,7 +112,7 @@ for (const locale of ['en-US', 'ru-RU']) {
       const saved = await app.serviceWorker.evaluate(() => chrome.storage.local.get(['sf.guides', 'sf.recordingDraft']));
       assert.equal(saved['sf.guides'].length, 1);
       assert.equal(saved['sf.guides'][0].steps.length, 2);
-      assert.equal(saved['sf.recordingDraft'], null);
+      assert.equal(saved['sf.recordingDraft'] ?? null, null);
 
       const secondDraft = { ...draft, id: 'recording-cancel-test', steps: [{ id: 'step-c', index: 1, title: 'Нажмите', createdAt: Date.now() }] };
       await app.serviceWorker.evaluate((value) => chrome.storage.local.set({ 'sf.recordingDraft': value }), secondDraft);
@@ -121,7 +121,7 @@ for (const locale of ['en-US', 'ru-RU']) {
       await page.waitForFunction(() => document.getElementById('recording-card').hidden);
       const afterCancel = await app.serviceWorker.evaluate(() => chrome.storage.local.get(['sf.guides', 'sf.recordingDraft']));
       assert.equal(afterCancel['sf.guides'].length, 1, 'cancel does not create a guide');
-      assert.equal(afterCancel['sf.recordingDraft'], null);
+      assert.equal(afterCancel['sf.recordingDraft'] ?? null, null);
       assert.deepEqual(errors, []);
       await page.close();
     });
