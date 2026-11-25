@@ -3,10 +3,8 @@ import { DEFAULT_SETTINGS, SCHEMA_VERSION, STORAGE_KEYS } from './constants.js';
 /**
  * Thin repository layer over chrome.storage.local.
  * UI and background code must go through these functions, never call
- * chrome.storage directly — this keeps a single place for migrations
- * and lets us swap the backend (e.g. IndexedDB for screenshots) later.
+ * chrome.storage directly — this keeps a single place for migrations.
  */
-
 const area = () => chrome.storage.local;
 
 export async function getSettings() {
@@ -26,6 +24,17 @@ export async function getGuides() {
   return Array.isArray(guides) ? guides : [];
 }
 
+export async function getRecordingDraft() {
+  const { [STORAGE_KEYS.RECORDING_DRAFT]: draft } = await area().get(STORAGE_KEYS.RECORDING_DRAFT);
+  return draft || null;
+}
+
+export async function setRecordingDraft(draft) {
+  if (draft) await area().set({ [STORAGE_KEYS.RECORDING_DRAFT]: draft });
+  else await area().remove(STORAGE_KEYS.RECORDING_DRAFT);
+  return draft;
+}
+
 /**
  * Initialise / migrate storage. Called once from the service worker
  * on install and update.
@@ -33,7 +42,6 @@ export async function getGuides() {
 export async function initStorage() {
   const { [STORAGE_KEYS.SCHEMA_VERSION]: version } = await area().get(STORAGE_KEYS.SCHEMA_VERSION);
   if (version === SCHEMA_VERSION) return;
-  // Future migrations go here: if (version < 2) { ... }
   await area().set({ [STORAGE_KEYS.SCHEMA_VERSION]: SCHEMA_VERSION });
 }
 
