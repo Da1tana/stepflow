@@ -13,7 +13,8 @@ This file is the chronological map of meaningful project changes. It complements
 - Added RU/EN startup and error status strings and updated the popup smoke-test expectation.
 - First CI run caught a stale `comingSoon` locale key still used by the side panel after the popup cleanup; restored the key in both locales.
 - Tightened start-message authorization to the exact popup page.
-- This slice does not yet include stop/save/cancel controls, side-panel step rendering, or navigation recovery. Fresh CI is required for this new head.
+- CI run [#30](https://github.com/Da1tana/stepflow/actions/runs/45593035127) passed validation, unit tests, Chromium installation, package build, and the existing Chromium E2E suite for commit `bbb0e6f`.
+- This slice does not yet include stop/save/cancel controls, side-panel step rendering, or navigation recovery. Dedicated recording E2E coverage remains open.
 
 ### Recording core — first implementation slice
 - CI initially caught two test expectation issues: long token-like labels are intentionally blanked, and a sensitive button label is retained only as a generic action. Updated tests to assert those privacy behaviors.
