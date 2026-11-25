@@ -42,16 +42,25 @@ export function registerRecordingLifecycle({ tabs, scripting, getDraft, setDraft
     await setDraft({ ...draft, pauseReason: 'tab-closed', updatedAt: Date.now() });
   }
 
+  // Serialize lifecycle events so a fast "complete" cannot overtake the
+  // asynchronous storage write triggered by the preceding "loading" event.
+  let queue = Promise.resolve();
+  const enqueue = (task, message) => {
+    queue = queue.then(task).catch((error) => logger.error(message, error));
+    return queue;
+  };
+
   tabs.onUpdated.addListener((tabId, changeInfo) => {
-    const task = changeInfo.status === 'loading'
-      ? pauseForNavigation(tabId)
-      : changeInfo.status === 'complete'
-        ? resumeAfterNavigation(tabId)
-        : Promise.resolve();
-    return task.catch((error) => logger.error('Recording navigation lifecycle failed', error));
+    if (changeInfo.status === 'loading') {
+      return enqueue(() => pauseForNavigation(tabId), 'Recording navigation pause failed');
+    }
+    if (changeInfo.status === 'complete') {
+      return enqueue(() => resumeAfterNavigation(tabId), 'Recording navigation recovery failed');
+    }
+    return undefined;
   });
 
-  tabs.onRemoved.addListener((tabId) => {
-    return pauseForTabClose(tabId).catch((error) => logger.error('Recording tab-close handling failed', error));
-  });
+  tabs.onRemoved.addListener((tabId) => (
+    enqueue(() => pauseForTabClose(tabId), 'Recording tab-close handling failed')
+  ));
 }
