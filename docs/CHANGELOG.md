@@ -4,6 +4,16 @@ This file is the chronological map of meaningful project changes. It complements
 
 ## 2026-11-25
 
+### Recording completion and product definition — next implementation slice
+- Added a plain-language Russian product overview explaining the problem, target audience, everyday use cases, intended final workflow, product principles, and what is and is not implemented.
+- Added a pure conversion from a stopped non-empty recording to an editable guide model, with unit tests ensuring page origin is not copied into the guide.
+- Added service-worker stop/save and cancel handlers with strict side-panel sender checks.
+- Guide persistence and draft clearing are performed in one `chrome.storage.local.set` update to avoid a half-completed save.
+- Added live recording-step rendering and finish/cancel controls to the side panel.
+- Added RU/EN strings and E2E coverage for displaying a draft, saving a guide, and discarding a draft.
+- CI for this newer slice is pending; do not mark it complete until the current head passes.
+
+
 ### Browser integration — first recording slice
 - Added the minimal `activeTab` and `scripting` permissions and documented their purpose in the manifest validator and README.
 - Added popup-driven recording startup and programmatic injection of `src/content/recorder.js` into the active tab.
