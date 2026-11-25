@@ -2,68 +2,65 @@
 
 Last verified: 2026-11-25
 Branch: `feat/recording-mvp-recovery`
-Latest fully passing CI at the time of writing: [run #68](https://github.com/Da1tana/stepflow/actions/runs/45603907292) on branch HEAD `65351985a45b0c539cab40df40f81834124ca8d6`.
+Verified HEAD: `e8ff75977a2afdfb4c7c84195dbf75e09beab075`
+Latest fully passing CI: [run #90](https://github.com/Da1tana/stepflow/actions/runs/45605218843).
 
-This file is the acceptance-test inventory. A feature is not considered verified merely because its implementation or a mocked unit test exists.
+This is the acceptance-test inventory. Implementation or mocked unit coverage alone does not prove real browser behavior.
 
-## Automated coverage currently in the repository
+## Automated coverage on the verified HEAD
 
 | Area | Test location / scenario | Level | Status |
 |---|---|---|---|
-| Privacy descriptor allowlist and redaction | `tests/unit/privacy.test.mjs` | Unit | Covered |
-| Input-like roles never retain labels | `tests/unit/privacy.test.mjs` | Unit | Covered |
-| Safe origin removes path/query/fragment/credentials | `tests/unit/privacy.test.mjs` | Unit | Covered |
-| Restricted URL classification | `tests/unit/restricted-url.test.mjs` | Unit | Covered |
-| Localized step labels | `tests/unit/step-label.test.mjs` | Unit | Covered |
-| Recording session transitions | `tests/unit/recording.test.mjs` | Unit | Covered |
-| Password-role canary is absent from the generated recording step | `tests/unit/recording.test.mjs` | Unit | Covered; 23/23 unit tests passed in CI #82 |
-| Content recorder ignores untrusted clicks and never reads input values/page text/HTML | `tests/unit/recorder.test.mjs` | Unit with fake DOM | Added; CI pending |
-| Guide conversion from recording | `tests/unit/guide-recording.test.mjs` | Unit | Covered |
-| Navigation loading pauses active draft | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
-| Successful reinjection resumes draft | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
-| Denied reinjection preserves paused draft | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
-| Tab close preserves captured steps | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
-| Browser tab close preserves draft in Chromium | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered; CI #74 passed |
-| Real Chromium tab close preserves the draft paused | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered; CI #82 passed |
-| Draft survives forced service-worker termination and restart | `tests/e2e/extension.e2e.mjs` + CDP helper in `tests/e2e/harness.mjs` | Chromium E2E | Covered; CI #82 passed |
-| Unrelated tabs do not affect recording | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
-| Manifest, permissions, paths and i18n validation | `scripts/validate.mjs` in CI | Static validation | Covered |
-| Popup render and state | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered |
-| Side panel render, settings persistence | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered |
-| Side panel displays a controlled draft and saves/cancels it | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered |
-| Guide list updates from storage and renders titles as text | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered |
-| Service worker responds to app message | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered |
-| English and Russian UI smoke tests | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered |
+| Guide conversion from stopped recording | `tests/unit/guide-recording.test.mjs` | Unit | Passed |
+| Privacy descriptor allowlist, redaction and malformed input | `tests/unit/privacy.test.mjs` | Unit | Passed |
+| Password-role canary is not persisted in a recording step | `tests/unit/recording.test.mjs` | Unit | Passed |
+| Restricted URL classification | `tests/unit/restricted-url.test.mjs` | Unit | Passed |
+| Localized step labels | `tests/unit/step-label.test.mjs` | Unit | Passed |
+| Recording session creation and state transitions | `tests/unit/recording.test.mjs` | Unit | Passed |
+| Recorder ignores untrusted clicks | `tests/unit/recorder.test.mjs` | Unit with fake DOM | Passed |
+| Recorder does not read input values, text, or HTML | `tests/unit/recorder.test.mjs` | Unit with fake DOM | Passed |
+| Recorder supports only allowlisted interactive roles and explicit metadata | `tests/unit/recorder.test.mjs` | Unit with fake DOM | Passed |
+| Navigation loading pauses the active draft | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Passed |
+| Successful reinjection resumes recording | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Passed |
+| Denied reinjection preserves paused draft | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Passed |
+| Tab closure preserves captured steps | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Passed |
+| Unrelated tabs do not affect recording | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Passed |
+| Manifest, permissions, paths and i18n | `scripts/validate.mjs` in CI | Static validation | Passed |
+| Popup and side-panel smoke flows in English and Russian | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Passed |
+| Side-panel draft display, save and cancel | `tests/e2e/extension.e2e.mjs` | Chromium E2E with controlled storage fixture | Passed |
+| Guide list rendering and title-as-text safety | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Passed |
+| Recorded tab closure preserves draft paused | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Passed |
+| Draft persists across forced service-worker target termination and wake-up | `tests/e2e/extension.e2e.mjs` + CDP helper in `tests/e2e/harness.mjs` | Chromium E2E | Passed |
+| Extension messaging and storage initialization | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Passed |
+
+## Latest CI evidence
+
+Run #90: [GitHub Actions](https://github.com/Da1tana/stepflow/actions/runs/45605218843), exact HEAD `e8ff75977a2afdfb4c7c84195dbf75e09beab075`.
+
+- `npm ci`: passed.
+- Static validation: passed.
+- Unit tests: **26/26 passed**.
+- Chromium installation: passed.
+- Clean extension package build: passed.
+- Chromium E2E: **18/18 passed** (9 English + 9 Russian).
+- Screenshot and extension artifact uploads: passed.
+
+No local commands were run; verification was performed by GitHub Actions.
 
 ## Outstanding acceptance tests
 
 | Priority | Scenario | Required proof | Status |
 |---|---|---|---|
-| P0 | Start recording from the real browser-action popup on an ordinary web tab | Popup user gesture grants temporary access; service worker injects recorder into the intended active tab | Not covered |
-| P0 | Capture a real trusted click | A real page click creates exactly one safe step in the active draft | Not covered |
-| P0 | Sensitive inputs are never persisted | Type unique canary values into text, email, password and textarea controls; click supported controls; inspect all relevant local storage and guide data for canaries | Unit tests cover password-role and sensitive-label sanitization; real typed-value/browser capture test remains not covered |
-| P0 | Content-script privacy boundary | Confirm captured descriptor contains only allowed role/label fields and no value, selector, text, HTML or URL | Unit harness now asserts no access to value/text/HTML and ignores untrusted clicks; real browser capture assertion remains open |
-| P1 | Same-origin navigation | Navigate within same origin; draft pauses, recorder is reinjected, recording resumes once | Unit behavior covered; real Chromium E2E not covered |
-| P1 | Cross-origin navigation | Navigate to another origin; reinjection denial leaves draft paused and preserves existing steps | Mocked denial covered; real Chromium E2E not covered |
-| P1 | Recorded tab closes | Draft remains paused and can still be saved/discarded | Mocked unit + new Chromium E2E; CI pending |
-| P1 | Service worker terminates/restarts | Draft survives worker termination; worker wakes on a new message and reads the persisted draft | Covered in Chromium E2E using CDP target close; CI #82 passed |
-| P1 | Fast loading/complete event race | Serialized lifecycle transitions produce final recording state deterministically | Mocked unit covered; browser stress test not covered |
-| P2 | Restricted page start | Clear failure, no draft left behind, no unhandled errors | Partially covered by URL unit tests; browser E2E not covered |
+| P0 | Start recording through the actual browser-action popup on a normal web page | Real browser action popup user gesture grants temporary access and starts capture on the intended active tab | Not covered; current popup E2E opens the popup HTML as an extension page |
+| P0 | Capture a real trusted page click | Real page click creates exactly one safe step in the active draft | Not covered |
+| P0 | Typed-value privacy canaries | Type unique canaries into text, email, password and textarea controls; exercise supported controls; inspect draft and saved guide storage for every canary | Not covered end-to-end; unit tests prove the recorder does not read values and the core redacts password labels |
+| P0 | Browser-level content-script privacy boundary | Confirm real content-script message contains only allowed role/label fields and no value, selector, page text, HTML or sensitive URL data | Not covered end-to-end; fake-DOM unit coverage exists |
+| P1 | Same-origin navigation recovery | Navigate within the same origin; draft pauses, recorder is reinjected, recording resumes exactly once | Unit behavior passed; real Chromium E2E not covered |
+| P1 | Cross-origin navigation denial | Navigate to another origin; denied reinjection leaves draft paused and preserves captured steps | Mocked denial passed; real Chromium E2E not covered |
+| P1 | Fast loading/complete race | Browser stress test proves deterministic lifecycle state under rapid events | Serialized mocked unit coverage passed; browser stress test not covered |
+| P2 | Restricted page start | Clear user-facing failure, no draft left behind, no unhandled errors | URL classification unit coverage passed; browser E2E not covered |
 
-## CI test map
+## Recording MVP acceptance gate
 
-The latest fully passing run #82 executed these steps successfully:
+Do not mark Recording MVP complete until all P0 tests pass in Chromium and P1 lifecycle scenarios have browser-level coverage or an explicitly accepted limitation. CI must be green on the exact PR head under review.
 
-1. `npm ci`
-2. Manifest, permission, path and i18n validation
-3. Unit tests
-4. Chromium installation
-5. Clean extension package build
-6. Chromium E2E suite
-7. Screenshot and extension artifact uploads
-
-Run #82 reported 23/23 unit tests and 18/18 Chromium E2E tests passing. It includes real tab-close recovery and forced service-worker termination/restart. No local commands were run by the assistant. The CI result is evidence for this exact PR head only; new commits require a new CI run.
-
-## Acceptance gate for Recording MVP
-
-Do not mark Recording MVP complete until all P0 tests pass in Chromium and the P1 lifecycle scenarios have browser-level coverage or an explicitly documented, accepted limitation. CI must be green on the exact PR head being reviewed.
