@@ -4,6 +4,14 @@ This file is the chronological map of meaningful project changes. It complements
 
 ## 2026-11-25
 
+### Recording navigation and tab-close recovery
+- Added a service-worker lifecycle coordinator that pauses the active draft while a tab navigates, attempts to reinject the recorder after the document completes, and resumes only after successful injection.
+- If reinjection is denied (including a possible cross-origin `activeTab` revocation), the draft remains paused and its already captured steps are preserved.
+- Closing the recorded tab now preserves the draft in a paused state instead of deleting it.
+- Serialized lifecycle events to prevent asynchronous storage writes from racing between navigation loading and completion.
+- Added mocked-API unit tests for successful reinjection, denied reinjection, tab closure, and unrelated tabs. Real Chromium lifecycle E2E and service-worker restart coverage remain outstanding.
+
+
 ### Repository branch recovery and PR continuity
 - A documentation commit was accidentally created with an incomplete Git tree because the tree API was given a commit SHA instead of a tree SHA. The resulting branch head omitted existing files; `main` was not modified.
 - To preserve the no-force-push/no-history-rewrite rule, recovered the complete repository from the last intact, CI-passing implementation commit `89516fd` onto `feat/recording-mvp-recovery`.
