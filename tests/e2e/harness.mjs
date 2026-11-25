@@ -56,18 +56,21 @@ export async function launchWithExtension({ headless = !process.env.HEADED, user
 
   async function openActionPopup() {
     const popupPromise = context.waitForEvent('page', { timeout: 5_000 });
-    await serviceWorker.evaluate(async () => {
+    const openPromise = serviceWorker.evaluate(async () => {
       if (typeof chrome.action.openPopup !== 'function') {
         throw new Error('chrome.action.openPopup is unavailable in this Chromium build');
       }
       await chrome.action.openPopup();
     });
+    // Some Chromium builds settle openPopup only after the popup closes.
+    // Observe the popup target first so the test can interact with it.
+    openPromise.catch(() => {});
     const page = await popupPromise;
     const errors = [];
     page.on('pageerror', (err) => errors.push(err.message));
     page.on('console', (msg) => msg.type() === 'error' && errors.push(msg.text()));
     await page.waitForLoadState('domcontentloaded');
-    return { page, errors };
+    return { page, errors, openPromise };
   }
 
   async function stopServiceWorker() {
