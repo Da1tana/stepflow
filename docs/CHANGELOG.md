@@ -22,9 +22,15 @@ This file is the chronological map of meaningful project changes. It complements
 - Added `docs/DECISIONS.md`: decisions and open technical questions.
 - Updated the recording plan with explicit API, user-gesture, and privacy verification gates.
 
-### Documentation PR opened
-- Opened [PR #2](https://github.com/Da1tana/stepflow/pull/2), draft, targeting `main`.
+### Branch synchronization and technical review
+- Synchronized `feat/recording-mvp` with the merged `main` baseline using a normal two-parent merge commit: [64b3134](https://github.com/Da1tana/stepflow/commit/64b31342924f5a3779f727143f259e8ddbe13ddd).
+- GitHub compare now reports 16 commits ahead and 0 behind; the diff remains the same six documentation files.
+- No source code was changed and no PR was merged.
+- Reviewed official Chrome documentation for `activeTab`, `tabs`, and `sidePanel.open()`. Key findings are recorded in `DECISIONS.md`.
+- No fresh CI pass is claimed; the PR-triggered workflow query returned no runs for the sync commit.
+
+### Documentation PR
+- [PR #2](https://github.com/Da1tana/stepflow/pull/2) remains an open draft targeting `main`.
 - PR contains documentation only; no source-code implementation changes.
-- GitHub compare: `feat/recording-mvp` is 10 commits ahead and 1 commit behind `main`; the changed-file diff is six documentation files.
-- PR #2 reported `mergeable: false` at creation. Branch synchronization remains unresolved and must be handled without force-push.
-- Latest combined-status query returned no status entries; no fresh CI pass is claimed.
+- The feature branch is synchronized with `main`, and the PR is mergeable according to the latest GitHub PR metadata.
+- The PR is intentionally not merged. The repository owner controls that decision.
