@@ -2,7 +2,7 @@
 
 This roadmap is ordered by product dependencies. A milestone is not complete until its acceptance criteria are met and its implementation is present in the repository.
 
-For the full project map, see [PROJECT_STATUS.md](PROJECT_STATUS.md), [CHANGELOG.md](CHANGELOG.md), and [DECISIONS.md](DECISIONS.md). The AI/developer handoff is in [AI_HANDOFF.md](AI_HANDOFF.md).
+For the product purpose and target users, see [PRODUCT_OVERVIEW.ru.md](PRODUCT_OVERVIEW.ru.md). For the full project map, see [PROJECT_STATUS.md](PROJECT_STATUS.md), [CHANGELOG.md](CHANGELOG.md), and [DECISIONS.md](DECISIONS.md). The AI/developer handoff is in [AI_HANDOFF.md](AI_HANDOFF.md).
 
 ## 0. Foundation — complete
 
@@ -33,9 +33,11 @@ Delivered in merged [PR #1](https://github.com/Da1tana/stepflow/pull/1).
 - Trusted clicks on supported interactive elements are captured.
 - Descriptors are validated/sanitized again in the service worker.
 - A single draft and safe steps are persisted locally.
-- Remaining: display steps live in the side panel; stop and save a guide; cancel and discard a draft.
-- Handle same-origin navigation, cross-origin pause/resume, restricted pages, tab close, and service-worker restart.
-- Add browser E2E tests, including assertions that typed values and passwords never enter storage.
+- Side panel displays steps live.
+- Finish/save converts a non-empty stopped recording into a local guide; guide and draft updates are persisted together.
+- Cancel discards the current draft without creating a guide.
+- Remaining: handle same-origin navigation, cross-origin pause/resume, restricted pages, tab close, and service-worker restart.
+- E2E now covers side-panel display, save and cancel using a controlled draft fixture. Remaining: real popup-started trusted click capture and assertions that typed values/passwords never enter storage.
 
 ### Acceptance criteria
 
