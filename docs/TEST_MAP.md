@@ -22,6 +22,7 @@ This file is the acceptance-test inventory. A feature is not considered verified
 | Successful reinjection resumes draft | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
 | Denied reinjection preserves paused draft | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
 | Tab close preserves captured steps | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
+| Real Chromium tab close preserves the draft paused | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Added; CI pending |
 | Unrelated tabs do not affect recording | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
 | Manifest, permissions, paths and i18n validation | `scripts/validate.mjs` in CI | Static validation | Covered |
 | Popup render and state | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered |
@@ -41,7 +42,7 @@ This file is the acceptance-test inventory. A feature is not considered verified
 | P0 | Content-script privacy boundary | Confirm captured descriptor contains only allowed role/label fields and no value, selector, text, HTML or URL | Partially covered by code review and unit tests; no browser assertion |
 | P1 | Same-origin navigation | Navigate within same origin; draft pauses, recorder is reinjected, recording resumes once | Unit behavior covered; real Chromium E2E not covered |
 | P1 | Cross-origin navigation | Navigate to another origin; reinjection denial leaves draft paused and preserves existing steps | Mocked denial covered; real Chromium E2E not covered |
-| P1 | Recorded tab closes | Draft remains paused and can still be saved/discarded | Mocked unit covered; real Chromium E2E not covered |
+| P1 | Recorded tab closes | Draft remains paused and can still be saved/discarded | Mocked unit + new Chromium E2E; CI pending |
 | P1 | Service worker terminates/restarts | Draft survives worker termination; UI and lifecycle handlers recover without duplicate listeners or lost steps | Not covered |
 | P1 | Fast loading/complete event race | Serialized lifecycle transitions produce final recording state deterministically | Mocked unit covered; browser stress test not covered |
 | P2 | Restricted page start | Clear failure, no draft left behind, no unhandled errors | Partially covered by URL unit tests; browser E2E not covered |
