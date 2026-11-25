@@ -83,6 +83,7 @@ for (const locale of ['en-US', 'ru-RU']) {
 
         try {
           await target.goto(`http://127.0.0.1:${address.port}/fixture`);
+          await target.bringToFront();
           const popup = await app.openActionPopup();
           await popup.page.waitForFunction(() => !document.getElementById('start-recording').disabled);
           await popup.page.click('#start-recording');
@@ -100,14 +101,15 @@ for (const locale of ['en-US', 'ru-RU']) {
           }
           await target.locator('#safe-action').click();
 
-          await target.waitForFunction(async () => {
-            const { 'sf.recordingDraft': draft } = await chrome.storage.local.get('sf.recordingDraft');
-            return draft?.status === 'recording' && draft.steps.length === 5;
-          }, null, { timeout: 5_000 });
-
-          const { 'sf.recordingDraft': draft } = await app.serviceWorker.evaluate(() =>
-            chrome.storage.local.get('sf.recordingDraft'),
-          );
+          let draft;
+          for (let attempt = 0; attempt < 50; attempt += 1) {
+            draft = await app.serviceWorker.evaluate(async () => {
+              const { 'sf.recordingDraft': value } = await chrome.storage.local.get('sf.recordingDraft');
+              return value;
+            });
+            if (draft?.status === 'recording' && draft.steps.length === 5) break;
+            await new Promise((resolve) => setTimeout(resolve, 100));
+          }
           assert.equal(draft.steps.length, 5);
           assert.ok(draft.steps.some((step) => step.title.includes('Save safe action')));
           const serialized = JSON.stringify(draft);
