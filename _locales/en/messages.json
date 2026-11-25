@@ -91,5 +91,20 @@
   },
   "comingSoon": {
     "message": "Soon"
+  },
+  "recordingTitle": {
+    "message": "Recording in progress"
+  },
+  "recordingActive": {
+    "message": "Recording your supported clicks"
+  },
+  "recordingPaused": {
+    "message": "Recording paused"
+  },
+  "finishRecording": {
+    "message": "Finish and save"
+  },
+  "cancelRecording": {
+    "message": "Discard recording"
   }
 }
