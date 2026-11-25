@@ -103,9 +103,7 @@ for (const locale of ['en-US', 'ru-RU']) {
       };
       await page.evaluate((value) => chrome.storage.local.set({ 'sf.recordingDraft': value }), draft);
 
-      const workerClosed = app.serviceWorker.waitForEvent('close', { timeout: 5_000 });
       await app.stopServiceWorker();
-      await workerClosed;
 
       const restartedWorkerPromise = app.context.waitForEvent('serviceworker', { timeout: 5_000 });
       const pong = await page.evaluate(() => chrome.runtime.sendMessage({ type: 'app/ping' }));
