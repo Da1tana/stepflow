@@ -116,8 +116,24 @@ for (const locale of ['en-US', 'ru-RU']) {
           for (const canary of canaries) {
             assert.equal(serialized.includes(canary), false, `stored draft must not contain ${canary}`);
           }
+          const panel = await app.openPage('src/sidepanel/sidepanel.html');
+          await panel.page.waitForSelector('#recording-card:not([hidden])');
+          await panel.page.click('#stop-recording');
+          await panel.page.waitForSelector('#recording-card[hidden]');
+          const stored = await app.serviceWorker.evaluate(() =>
+            chrome.storage.local.get(['sf.guides', 'sf.recordingDraft']),
+          );
+          assert.equal(stored['sf.guides'].length, 1);
+          assert.equal(stored['sf.guides'][0].steps.length, 5);
+          const saved = JSON.stringify(stored['sf.guides']);
+          for (const canary of canaries) {
+            assert.equal(saved.includes(canary), false, `saved guide must not contain ${canary}`);
+          }
+          assert.equal(stored['sf.recordingDraft'] ?? null, null);
           assert.deepEqual(popup.errors, []);
-          await app.serviceWorker.evaluate(() => chrome.storage.local.remove('sf.recordingDraft'));
+          assert.deepEqual(panel.errors, []);
+          await app.serviceWorker.evaluate(() => chrome.storage.local.remove('sf.guides'));
+          await panel.page.close();
         } finally {
           await target.close();
           await new Promise((resolve) => server.close(resolve));
