@@ -6,6 +6,7 @@
  * Screenshots of every screen are written to test-results/.
  */
 import assert from 'node:assert/strict';
+import { createServer } from 'node:http';
 import { mkdirSync } from 'node:fs';
 import { after, before, describe, test } from 'node:test';
 import { REPO_ROOT, launchWithExtension } from './harness.mjs';
@@ -52,6 +53,75 @@ for (const locale of ['en-US', 'ru-RU']) {
       assert.deepEqual(errors, []);
       await page.close();
     });
+
+    if (locale === 'en-US') {
+      test('native action popup starts recording and real page clicks stay privacy-safe', async () => {
+        const server = createServer((_request, response) => {
+          response.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
+          response.end(`<!doctype html>
+            <html><body>
+              <label>Text <input id="text-field" type="text"></label>
+              <label>Email <input id="email-field" type="email"></label>
+              <label>Password <input id="password-field" type="password"></label>
+              <label>Notes <textarea id="notes-field"></textarea></label>
+              <button id="safe-action" aria-label="Save safe action">Save</button>
+            </body></html>`);
+        });
+        await new Promise((resolve, reject) => {
+          server.once('error', reject);
+          server.listen(0, '127.0.0.1', resolve);
+        });
+
+        const target = await app.context.newPage();
+        const address = server.address();
+        const canaries = [
+          'sf-text-canary-7f31',
+          'sf-email-canary-9a42@example.test',
+          'sf-password-canary-5c83',
+          'sf-notes-canary-2d64',
+        ];
+
+        try {
+          await target.goto(`http://127.0.0.1:${address.port}/fixture`);
+          const popup = await app.openActionPopup();
+          await popup.page.waitForFunction(() => !document.getElementById('start-recording').disabled);
+          await popup.page.click('#start-recording');
+          await popup.page.waitForEvent('close', { timeout: 5_000 });
+          assert.deepEqual(popup.errors, []);
+
+          for (const [selector, value] of [
+            ['#text-field', canaries[0]],
+            ['#email-field', canaries[1]],
+            ['#password-field', canaries[2]],
+            ['#notes-field', canaries[3]],
+          ]) {
+            await target.locator(selector).fill(value);
+            await target.locator(selector).click();
+          }
+          await target.locator('#safe-action').click();
+
+          await target.waitForFunction(async () => {
+            const { 'sf.recordingDraft': draft } = await chrome.storage.local.get('sf.recordingDraft');
+            return draft?.status === 'recording' && draft.steps.length === 5;
+          }, null, { timeout: 5_000 });
+
+          const { 'sf.recordingDraft': draft } = await app.serviceWorker.evaluate(() =>
+            chrome.storage.local.get('sf.recordingDraft'),
+          );
+          assert.equal(draft.steps.length, 5);
+          assert.ok(draft.steps.some((step) => step.title.includes('Save safe action')));
+          const serialized = JSON.stringify(draft);
+          for (const canary of canaries) {
+            assert.equal(serialized.includes(canary), false, `stored draft must not contain ${canary}`);
+          }
+          assert.deepEqual(popup.errors, []);
+          await app.serviceWorker.evaluate(() => chrome.storage.local.remove('sf.recordingDraft'));
+        } finally {
+          await target.close();
+          await new Promise((resolve) => server.close(resolve));
+        }
+      });
+    }
 
     test('popup button opens the side panel', async () => {
       const { page, errors } = await app.openPage('src/popup/popup.html', { width: 340, height: 320 });
