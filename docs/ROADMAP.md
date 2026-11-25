@@ -2,6 +2,8 @@
 
 This roadmap is ordered by product dependencies. A milestone is not complete until its acceptance criteria are met and its implementation is present in the repository.
 
+For the full project map, see [PROJECT_STATUS.md](PROJECT_STATUS.md), [CHANGELOG.md](CHANGELOG.md), and [DECISIONS.md](DECISIONS.md). The AI/developer handoff is in [AI_HANDOFF.md](AI_HANDOFF.md).
+
 ## 0. Foundation — complete
 
 Delivered in merged [PR #1](https://github.com/Da1tana/stepflow/pull/1).
@@ -35,6 +37,8 @@ Acceptance criteria:
 - No form values, passwords, page text/HTML, URL query, or URL fragment are stored.
 - Unit tests, E2E tests, static validation, and CI pass.
 - Documentation accurately describes the implemented behavior and permissions.
+
+Before implementation, resolve the browser API and gesture questions in [DECISIONS.md](DECISIONS.md). The detailed proposal is [plans/recording-mvp.md](plans/recording-mvp.md).
 
 ## 2. Screenshot capture
 
