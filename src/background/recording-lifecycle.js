@@ -48,10 +48,10 @@ export function registerRecordingLifecycle({ tabs, scripting, getDraft, setDraft
       : changeInfo.status === 'complete'
         ? resumeAfterNavigation(tabId)
         : Promise.resolve();
-    task.catch((error) => logger.error('Recording navigation lifecycle failed', error));
+    return task.catch((error) => logger.error('Recording navigation lifecycle failed', error));
   });
 
   tabs.onRemoved.addListener((tabId) => {
-    pauseForTabClose(tabId).catch((error) => logger.error('Recording tab-close handling failed', error));
+    return pauseForTabClose(tabId).catch((error) => logger.error('Recording tab-close handling failed', error));
   });
 }
