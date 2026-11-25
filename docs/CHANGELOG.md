@@ -27,6 +27,7 @@ This file is the chronological map of meaningful project changes. It complements
 - Added RU/EN strings and E2E coverage for displaying a draft, saving a guide, and discarding a draft.
 - First E2E run passed validation and all 18 unit tests, then caught a test expectation mismatch: cancellation removes the draft key, so `chrome.storage.local.get` returns `undefined`, not `null`. Updated the assertion to normalize absent and null values; application behavior is unchanged.
 - CI run [#48](https://github.com/Da1tana/stepflow/actions/runs/45595528199) passed for the corrected implementation head: validation, 18 unit tests, Chromium install, package build, and all E2E tests in RU/EN.
+- Recovery PR [#3](https://github.com/Da1tana/stepflow/pull/3) CI run [#49](https://github.com/Da1tana/stepflow/actions/runs/45596212263) also passed on the initial recovery branch head. Later commits only synchronize documentation.
 
 
 ### Browser integration — first recording slice
