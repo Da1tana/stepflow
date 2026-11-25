@@ -2,7 +2,7 @@
 
 Last verified: 2026-11-25
 Branch: `feat/recording-mvp-recovery`
-Latest fully passing CI at the time of writing: [run #59](https://github.com/Da1tana/stepflow/actions/runs/45602679182).
+Latest fully passing CI at the time of writing: [run #68](https://github.com/Da1tana/stepflow/actions/runs/45603907292) on branch HEAD `65351985a45b0c539cab40df40f81834124ca8d6`.
 
 This file is the acceptance-test inventory. A feature is not considered verified merely because its implementation or a mocked unit test exists.
 
@@ -16,7 +16,7 @@ This file is the acceptance-test inventory. A feature is not considered verified
 | Restricted URL classification | `tests/unit/restricted-url.test.mjs` | Unit | Covered |
 | Localized step labels | `tests/unit/step-label.test.mjs` | Unit | Covered |
 | Recording session transitions | `tests/unit/recording.test.mjs` | Unit | Covered |
-| Password-role canary is absent from the generated recording step | `tests/unit/recording.test.mjs` | Unit | Added; CI pending |
+| Password-role canary is absent from the generated recording step | `tests/unit/recording.test.mjs` | Unit | Covered; 23/23 unit tests passed in CI #68 |
 | Guide conversion from recording | `tests/unit/guide-recording.test.mjs` | Unit | Covered |
 | Navigation loading pauses active draft | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
 | Successful reinjection resumes draft | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
@@ -48,7 +48,7 @@ This file is the acceptance-test inventory. A feature is not considered verified
 
 ## CI test map
 
-The latest fully passing run #59 executed these steps successfully:
+The latest fully passing run #68 executed these steps successfully:
 
 1. `npm ci`
 2. Manifest, permission, path and i18n validation
@@ -58,7 +58,7 @@ The latest fully passing run #59 executed these steps successfully:
 6. Chromium E2E suite
 7. Screenshot and extension artifact uploads
 
-No local commands were run by the assistant. The CI result is the evidence for the listed run only; new commits require a new CI run.
+Run #68 reported 23/23 unit tests and 14/14 Chromium E2E tests passing. No local commands were run by the assistant. The CI result is evidence for this exact PR head only; new commits require a new CI run.
 
 ## Acceptance gate for Recording MVP
 
