@@ -56,9 +56,9 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 
 ## Not implemented yet
 
-- Real Chromium verification of navigation reinjection and cross-origin pause/recovery.
+- Real Chromium navigation lifecycle scenarios have now been added: same-origin pause/reinjection/resume and cross-origin denied reinjection with draft preservation. They remain unverified until CI passes on the exact current HEAD.
 - Service-worker termination/restart persistence is covered by Chromium E2E: the test terminates the worker target through CDP, wakes it with a message, and verifies the persisted draft.
-- Native browser-action popup, real trusted page clicks, and typed-value canaries through draft and saved-guide storage have been added as a Chromium E2E scenario; CI run #96 is pending. Do not count these as verified until the run passes.
+- Native browser-action popup, real trusted page clicks, and typed-value canaries through draft and saved-guide storage have been added as a Chromium E2E scenario; CI run #100 was still running on the preceding head when the navigation scenarios were added; the current head needs a fresh green CI run. Do not count these scenarios as verified until that run passes.
 - Screenshots, guide editor, and export.
 
 ## Privacy constraints
@@ -89,8 +89,7 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 
 ## Immediate next actions
 
-1. Investigate a Chromium CDP/native-popup harness for real browser-action popup invocation and trusted-click capture without broadening permissions.
-2. Add end-to-end typed-value privacy canaries that inspect draft and saved-guide storage.
-3. Add real Chromium same-origin navigation reinjection and cross-origin pause/recovery tests.
-4. Add a real-browser restricted-page start test.
-5. Re-run CI and update the acceptance decision.
+1. Verify the native browser-action popup, trusted-click privacy canaries, and new same-origin/cross-origin navigation scenarios in CI on the exact current HEAD.
+2. If CI fails or hangs, inspect the Chromium E2E job logs and fix the root cause without broadening permissions.
+3. Add a real-browser restricted-page start test.
+4. Re-run CI and update the acceptance decision.
