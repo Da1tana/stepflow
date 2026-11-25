@@ -54,13 +54,10 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 
 ## Not implemented yet
 
-- Service-worker tab lifecycle handling: pause on navigation start, reinject after navigation completes, resume only after successful injection, and preserve the draft paused when access is denied.
-- Tab closure preserves the current draft in a paused state so captured steps can still be saved or discarded.
-- Real Chromium navigation and service-worker restart recovery E2E verification.
-- Dedicated E2E coverage for starting a real recording from the popup and trusted page clicks.
-- Real-browser verification of same-origin reinjection and cross-origin pause/recovery.
-- Service-worker restart recovery.
-- Dedicated recording E2E tests for real trusted clicks and privacy boundaries.
+- Real Chromium verification of navigation reinjection, cross-origin pause/recovery, and tab closure.
+- E2E coverage of a real browser-action popup start followed by trusted clicks on a fixture page.
+- End-to-end assertions that input values and password contents never reach local storage.
+- Service-worker restart recovery verification.
 - Screenshots, guide editor, and export.
 
 ## Privacy constraints
@@ -84,14 +81,14 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 
 ## Verification
 
-- CI run [#48](https://github.com/Da1tana/stepflow/actions/runs/45595528199) passed on the implementation head: manifest/permissions/i18n validation, all 18 unit tests, Chromium installation, clean package build, side-panel save/cancel E2E in RU and EN, and artifact uploads.
-- PR #3 recovery-branch CI run [#49](https://github.com/Da1tana/stepflow/actions/runs/45596212263) also passed all checks on the initial recovery head. Commits after that run update documentation only; no source or test files changed.
-- The E2E suite verifies the existing popup/panel flows and localization. Dedicated real-click recording/privacy E2E tests are still outstanding.
+- CI run [#59](https://github.com/Da1tana/stepflow/actions/runs/45602679182) passed on the latest verified branch head: dependency installation, static validation, unit tests, Chromium installation, clean extension build, Chromium E2E, screenshots, and build artifact upload.
+- Existing E2E verifies popup rendering/open-panel, side-panel state, draft save/cancel, storage-driven guide rendering, and service-worker messaging in RU and EN. It does not yet exercise a real browser-action popup start followed by trusted clicks on a page.
+- See [TEST_MAP.md](TEST_MAP.md) for the current test inventory and remaining acceptance gaps.
 - No local terminal execution is available in the current GitHub-only workflow.
 
 ## Immediate next actions
 
-1. Run CI against the current browser-integration head and fix any failures.
-2. Add side-panel live step display and stop/save/cancel controls.
-3. Add navigation, tab-close, and restart recovery.
-4. Add recording-specific E2E tests for trusted clicks and privacy boundaries.
+1. Add real popup-started trusted-click E2E and storage privacy assertions.
+2. Add Chromium lifecycle E2E for same-origin navigation, cross-origin denial, and tab closure.
+3. Verify draft persistence across service-worker termination/restart.
+4. Re-run CI and update the acceptance decision.
