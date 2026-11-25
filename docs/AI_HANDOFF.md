@@ -74,7 +74,9 @@ Verified on 2026-11-25:
 - The active recovery branch includes the project map and Recording MVP implementation across the pure core, popup, content recorder, service worker, storage, and side panel.
 - Pure core modules: `privacy.js`, `step-label.js`, `restricted-url.js`, and `recording.js`, with unit tests.
 - Browser flow implemented: `activeTab` + `scripting`, popup start, content-script injection, trusted-click capture, sender/tab/frame/session checks, second sanitization boundary, local draft persistence, live side-panel display, finish/save, and cancel.
-- Remaining before calling Recording MVP verified: dedicated E2E that starts from the real popup user gesture and captures real trusted clicks; tests proving sensitive typed values never reach storage; same-origin navigation reinjection; cross-origin pause/recovery; tab-close and service-worker restart behavior.
+- Navigation lifecycle handling is implemented in `src/background/recording-lifecycle.js`: pause on tab loading, attempt recorder reinjection after completion, resume only when injection succeeds, and preserve the draft as paused if access is denied. Tab closure also preserves the draft in a paused state.
+- Unit tests cover serialized loading/completion transitions, successful reinjection, denied reinjection, tab closure, and unrelated tabs. These use mocked browser APIs; real Chromium lifecycle E2E is still required.
+- Remaining before calling Recording MVP verified: dedicated E2E that starts from the real popup user gesture and captures real trusted clicks; tests proving sensitive typed values never reach storage; real same-origin navigation reinjection; cross-origin pause/recovery; and service-worker restart behavior.
 - Screenshots, guide editor, and export are later milestones.
 - No local terminal execution is available in the current GitHub-only workflow. CI must be checked against the exact latest PR head; an older green run does not verify newer commits.
 
