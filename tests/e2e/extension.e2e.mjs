@@ -89,6 +89,45 @@ for (const locale of ['en-US', 'ru-RU']) {
     });
 
 
+    test('closing the recorded browser tab preserves its draft as paused', async () => {
+      const target = await app.context.newPage();
+      await target.goto('about:blank');
+      await target.bringToFront();
+
+      const tabId = await app.serviceWorker.evaluate(async () => {
+        const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+        return tab.id;
+      });
+      await app.serviceWorker.evaluate(async (id) => {
+        await chrome.storage.local.set({
+          'sf.recordingDraft': {
+            id: 'tab-close-e2e',
+            tabId: id,
+            status: 'recording',
+            pauseReason: null,
+            origin: 'https://example.test',
+            startedAt: 1,
+            updatedAt: 1,
+            steps: [{ id: 'kept-step', index: 1, title: 'Click safe action', createdAt: 1 }],
+          },
+        });
+      }, tabId);
+
+      await target.close();
+      await app.serviceWorker.waitForFunction(async () => {
+        const { 'sf.recordingDraft': draft } = await chrome.storage.local.get('sf.recordingDraft');
+        return draft?.status === 'paused' && draft.pauseReason === 'tab-closed';
+      }, null, { timeout: 5_000 });
+
+      const { 'sf.recordingDraft': draft } = await app.serviceWorker.evaluate(() =>
+        chrome.storage.local.get('sf.recordingDraft'),
+      );
+      assert.equal(draft.steps.length, 1);
+      assert.equal(draft.steps[0].id, 'kept-step');
+      assert.equal(draft.pauseReason, 'tab-closed');
+      await app.serviceWorker.evaluate(() => chrome.storage.local.remove('sf.recordingDraft'));
+    });
+
     test('side panel shows recording steps and can save or discard a draft', async () => {
       const { page, errors } = await app.openPage('src/sidepanel/sidepanel.html');
       const draft = {
