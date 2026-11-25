@@ -14,7 +14,7 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 - Active workstream / documentation PR: [#2](https://github.com/Da1tana/stepflow/pull/2) — open draft, not merged.
 - Active branch: `feat/recording-mvp`.
 - The feature branch was synchronized with `main` before implementation. Recheck compare before every task.
-- The branch currently contains project documentation and the first recording-core slice. The source code changes are still only on the feature branch.
+- The branch contains the project map, pure recording core, and the first browser-integration slice. All changes remain on this feature branch.
 
 ## Implemented in main
 
@@ -29,7 +29,7 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 - Playwright E2E setup and GitHub Actions CI.
 - Packaging and standalone Chromium scripts.
 
-The current manifest permissions are `sidePanel` and `storage`. There are no host permissions, `tabs` permission, or statically declared content scripts in the foundation.
+The feature manifest requests `sidePanel`, `storage`, `activeTab`, and `scripting`. It has no persistent host permissions, `tabs` permission, or statically declared content scripts.
 
 ## Implemented on feat/recording-mvp
 
@@ -42,7 +42,7 @@ First vertical slice of pure recording-domain logic:
 - `src/core/recording.js`: serializable session creation and immutable append/pause/resume/stop/cancel transitions.
 - Four unit-test files cover privacy, labels, URL restrictions, and session state.
 
-These are pure modules only. They do not yet capture browser events or write recording data to extension storage.
+
 
 ## Not implemented yet
 
@@ -78,14 +78,12 @@ These are pure modules only. They do not yet capture browser events or write rec
 
 - PR #1 reports that foundation validation, unit tests (3/3), and E2E tests (12/12) passed at the time of that PR. This is historical evidence only.
 - Previous CI run for commit `70e4444` completed successfully before the recording-core files were added; it does not verify the current implementation.
-- Current code has not been executed locally in this GitHub-only environment.
-- Wait for a CI run associated with the latest feature-branch commit before marking tests passed.
+- No local terminal execution is available in the current GitHub-only workflow.
+- CI for core commit `27d1123` passed all checks. Browser-integration changes are newer and require a fresh CI run before they are considered verified.
 
 ## Immediate next actions
 
-1. Run CI against the current recording-core commit and fix any failures.
-2. Implement manifest permissions, popup start flow, and programmatic content-script injection.
-3. Add trusted click capture with strict DOM data minimization.
-4. Add service-worker validation and local draft persistence.
-5. Add side-panel live display and stop/save/cancel controls.
-6. Add navigation and restart recovery E2E tests; update the project map.
+1. Run CI against the current browser-integration head and fix any failures.
+2. Add side-panel live display and stop/save/cancel controls.
+3. Add navigation recovery, tab-close handling, and restart recovery.
+4. Add recording E2E tests for trusted clicks and privacy boundaries.
