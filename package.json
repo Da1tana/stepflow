@@ -1,0 +1,24 @@
+{
+  "name": "stepflow",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Chrome extension that records browser actions and turns them into step-by-step guides.",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "validate": "node scripts/validate.mjs",
+    "test": "node --test \"tests/unit/**/*.test.mjs\"",
+    "test:e2e": "node --test --test-concurrency=1 \"tests/e2e/**/*.e2e.mjs\"",
+    "check": "npm run validate && npm test",
+    "check:all": "npm run check && npm run test:e2e",
+    "chromium": "node scripts/chromium.mjs",
+    "setup:browser": "playwright install chromium",
+    "pack": "node scripts/pack.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  }
+}
