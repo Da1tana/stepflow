@@ -156,3 +156,68 @@ body {
 .panel__version {
   font-family: var(--sf-font-mono);
 }
+
+/* ---------- Active recording ---------- */
+.recording-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sf-space-3);
+  padding: var(--sf-space-4);
+}
+
+.recording-card[hidden] {
+  display: none;
+}
+
+.recording-card__header,
+.recording-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sf-space-2);
+}
+
+.recording-card__header h2 {
+  font-size: var(--sf-text-lg);
+  margin-bottom: 4px;
+}
+
+.recording-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sf-space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 320px;
+  overflow: auto;
+}
+
+.recording-steps li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sf-space-2);
+  padding: var(--sf-space-2) 0;
+  border-bottom: 1px solid var(--sf-border);
+  overflow-wrap: anywhere;
+}
+
+.recording-steps__number {
+  flex: 0 0 24px;
+  color: var(--sf-text-subtle);
+  font-family: var(--sf-font-mono);
+}
+
+.recording-actions {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.recording-error {
+  color: var(--sf-danger, #ff7777);
+  font-size: var(--sf-text-sm);
+}
+
+.recording-error[hidden] {
+  display: none;
+}
