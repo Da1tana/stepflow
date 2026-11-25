@@ -7,7 +7,7 @@ test('descriptor accepts only allowlisted roles and safe labels', () => {
   assert.equal(sanitizeElementDescriptor({ role: 'img', label: 'Logo' }), null);
   assert.equal(sanitizeElementDescriptor({ role: 'button', label: 'user@example.com' }).label, '');
   assert.equal(sanitizeElementDescriptor({ role: 'button', label: 'Order 123456' }).label, '');
-  assert.equal(sanitizeElementDescriptor({ role: 'button', label: 'a'.repeat(80) }).label.length, 60);
+  assert.equal(sanitizeElementDescriptor({ role: 'button', label: 'Save '.repeat(20) }).label.length, 60);
 });
 
 test('input-like controls never retain supplied labels', () => {

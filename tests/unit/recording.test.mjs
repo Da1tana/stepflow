@@ -19,13 +19,16 @@ test('rejects invalid tabs and unsupported URLs', () => {
   assert.throws(() => createRecordingSession({ tabId: 1, pageUrl: 'chrome://settings' }));
 });
 
-test('appends safe steps immutably and ignores unsafe descriptors', () => {
+test('appends safe steps immutably and drops sensitive labels', () => {
   const first = createRecordingSession({ tabId: 1, pageUrl: 'https://example.com', now: 1 });
   const second = appendRecordingStep(first, { role: 'button', label: 'Save' }, { locale: 'en', now: 2 });
   assert.equal(first.steps.length, 0);
   assert.equal(second.steps.length, 1);
   assert.equal(second.steps[0].title, 'Click «Save»');
-  assert.equal(appendRecordingStep(second, { role: 'button', label: 'user@example.com' }), second);
+  const third = appendRecordingStep(second, { role: 'button', label: 'user@example.com' }, { now: 3 });
+  assert.equal(third.steps.length, 2);
+  assert.equal(third.steps[1].title, 'Нажмите');
+  assert.equal(JSON.stringify(third).includes('user@example.com'), false);
 });
 
 test('pause, resume, stop and cancel follow explicit state transitions', () => {
