@@ -108,7 +108,7 @@ for (const locale of ['en-US', 'ru-RU']) {
       assert.equal(await page.locator('#recording-steps li').count(), 2);
       assert.equal(await page.locator('#recording-steps').textContent(), '1Нажмите2Нажмите «Сохранить»');
       await page.click('#stop-recording');
-      await page.waitForSelector('#recording-card[hidden]');
+      await page.waitForFunction(() => document.getElementById('recording-card').hidden);
       const saved = await app.serviceWorker.evaluate(() => chrome.storage.local.get(['sf.guides', 'sf.recordingDraft']));
       assert.equal(saved['sf.guides'].length, 1);
       assert.equal(saved['sf.guides'][0].steps.length, 2);
@@ -118,7 +118,7 @@ for (const locale of ['en-US', 'ru-RU']) {
       await app.serviceWorker.evaluate((value) => chrome.storage.local.set({ 'sf.recordingDraft': value }), secondDraft);
       await page.waitForSelector('#recording-card:not([hidden])');
       await page.click('#cancel-recording');
-      await page.waitForSelector('#recording-card[hidden]');
+      await page.waitForFunction(() => document.getElementById('recording-card').hidden);
       const afterCancel = await app.serviceWorker.evaluate(() => chrome.storage.local.get(['sf.guides', 'sf.recordingDraft']));
       assert.equal(afterCancel['sf.guides'].length, 1, 'cancel does not create a guide');
       assert.equal(afterCancel['sf.recordingDraft'], null);
