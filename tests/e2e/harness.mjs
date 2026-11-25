@@ -65,7 +65,18 @@ export async function launchWithExtension({ headless = !process.env.HEADED, user
         && item.url.startsWith(`chrome-extension://${extensionId}/`)
       ));
       if (!target) throw new Error('StepFlow service worker target was not found');
-      await cdp.send('Target.closeTarget', { targetId: target.targetId });
+      const { success } = await cdp.send('Target.closeTarget', { targetId: target.targetId });
+      if (!success) throw new Error('Chromium did not close the StepFlow service worker target');
+
+      // Confirm termination at the protocol level before the test wakes the worker again.
+      for (let attempt = 0; attempt < 30; attempt += 1) {
+        const { targetInfos: currentTargets } = await cdp.send('Target.getTargets');
+        if (!currentTargets.some((item) => item.targetId === target.targetId)) {
+          return target.targetId;
+        }
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      }
+      throw new Error('StepFlow service worker target remained active after Target.closeTarget');
     } finally {
       await cdp.detach();
     }
