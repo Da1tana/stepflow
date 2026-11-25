@@ -2,6 +2,31 @@
 
 Record decisions that affect product scope, architecture, privacy, or delivery. Add new entries at the top with date, status, decision, rationale, and consequences. Revisit a decision only by adding a new entry; do not silently erase its history.
 
+## 2026-11-25 — Chrome API review for Recording MVP
+
+**Status:** documented direction; E2E confirmation still required
+
+**Decision:**
+- Keep the permission set minimal: add `activeTab` and `scripting` to the existing `sidePanel` and `storage` permissions when the recording implementation is introduced.
+- The user invokes StepFlow by opening its popup (toolbar action or configured shortcut); Chrome documents popup invocation as an `activeTab`-granting action.
+- Start script injection from the popup flow. Open the side panel with `chrome.sidePanel.open()` directly in the popup's user-click handler, not after an asynchronous round trip to the service worker.
+- Use `chrome.tabs.onUpdated` and `chrome.tabs.onRemoved` for lifecycle observation without adding the `tabs` permission. Avoid reading sensitive tab properties unless the active-tab host grant makes them available.
+- On navigation, pause recording while the document loads. After load, attempt reinjection. Same-origin access should remain available; a failed injection after cross-origin navigation leaves the recording paused until the user invokes StepFlow again.
+- Do not add `webNavigation`, broad host permissions, or static content scripts for this MVP.
+
+**Rationale:** Chrome's API reference states that most Tabs API operations need no permission; the `tabs` permission primarily unlocks sensitive tab properties (`url`, `pendingUrl`, `title`, `favIconUrl`). The `activeTab` grant supplies temporary host access to the invoked tab. Chrome's Side Panel API requires `open()` to follow a user interaction.
+
+**Consequences / validation required:**
+- Use tab ID and non-sensitive loading status for lifecycle events; do not depend on a globally readable URL.
+- E2E tests must prove same-origin reinjection succeeds and cross-origin reinjection fails safely.
+- The popup must call `sidePanel.open()` directly from a real click handler; test this in Chromium.
+- These docs establish a technical direction, not a claim that recording is implemented or that every browser edge case has been tested.
+
+**Official references:**
+- [activeTab permission](https://developer.chrome.com/docs/extensions/develop/concepts/activeTab)
+- [Tabs API](https://developer.chrome.com/docs/extensions/reference/api/tabs)
+- [Side Panel API](https://developer.chrome.com/docs/extensions/reference/api/sidePanel)
+
 ## 2026-11-25 — Keep GitHub as the source of truth
 
 **Status:** adopted
@@ -41,13 +66,3 @@ Record decisions that affect product scope, architecture, privacy, or delivery. 
 **Rationale:** Minimize operating cost, complexity, and privacy exposure while validating demand.
 
 **Consequences:** Prefer `chrome.storage.local` for small structured state and evaluate IndexedDB for larger binary data in a later milestone.
-
-## Open technical questions — resolve before implementation
-
-1. **Navigation listeners and permissions:** Verify in the target Chromium versions which `chrome.tabs` events can be used without the `tabs` permission, and which tab fields are actually available. Do not add `tabs` permission merely by assumption.
-2. **User-gesture propagation:** Verify that opening the side panel and starting injection can both be performed reliably from the popup's direct click flow. Call gesture-restricted APIs directly in the user-gesture handler where required.
-3. **Cross-origin recovery:** Confirm the exact re-grant flow after `activeTab` access is revoked.
-4. **Privacy labels:** Validate that accessible names and labels cannot leak sensitive content; do not assume regex redaction makes arbitrary page text safe.
-5. **Browser compatibility:** Define and test the supported Chromium baseline before claiming compatibility.
-
-These are verification gates, not permission to broaden the manifest or relax privacy constraints.
