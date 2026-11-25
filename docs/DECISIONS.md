@@ -2,7 +2,7 @@
 
 ## 2026-11-25 — Guide save is local and atomic with draft cleanup
 
-**Status:** implemented on `feat/recording-mvp`; CI verification pending
+**Status:** implemented and verified by CI run [#48](https://github.com/Da1tana/stepflow/actions/runs/45595528199)
 
 **Decision:** A non-empty stopped recording becomes a guide. Save the new guide list and clear the recording draft in a single `chrome.storage.local.set` operation. Empty recordings cannot be saved. Cancelling deletes the draft without creating a guide.
 
