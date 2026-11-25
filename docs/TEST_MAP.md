@@ -16,6 +16,7 @@ This file is the acceptance-test inventory. A feature is not considered verified
 | Restricted URL classification | `tests/unit/restricted-url.test.mjs` | Unit | Covered |
 | Localized step labels | `tests/unit/step-label.test.mjs` | Unit | Covered |
 | Recording session transitions | `tests/unit/recording.test.mjs` | Unit | Covered |
+| Password-role canary is absent from the generated recording step | `tests/unit/recording.test.mjs` | Unit | Added; CI pending |
 | Guide conversion from recording | `tests/unit/guide-recording.test.mjs` | Unit | Covered |
 | Navigation loading pauses active draft | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
 | Successful reinjection resumes draft | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
@@ -28,7 +29,6 @@ This file is the acceptance-test inventory. A feature is not considered verified
 | Side panel displays a controlled draft and saves/cancels it | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered |
 | Guide list updates from storage and renders titles as text | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered |
 | Service worker responds to app message | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered |
-| Service worker sanitizes a password-role descriptor before persistence | `tests/e2e/extension.e2e.mjs` | Chromium E2E via extension page message | Added; CI pending |
 | English and Russian UI smoke tests | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered |
 
 ## Outstanding acceptance tests
@@ -37,7 +37,7 @@ This file is the acceptance-test inventory. A feature is not considered verified
 |---|---|---|---|
 | P0 | Start recording from the real browser-action popup on an ordinary web tab | Popup user gesture grants temporary access; service worker injects recorder into the intended active tab | Not covered |
 | P0 | Capture a real trusted click | A real page click creates exactly one safe step in the active draft | Not covered |
-| P0 | Sensitive inputs are never persisted | Type unique canary values into text, email, password and textarea controls; click supported controls; inspect all relevant local storage and guide data for canaries | Not covered; worker-side sanitizer has a narrower E2E that injects a canary as a password-role label, but this does not exercise actual typing or the content script |
+| P0 | Sensitive inputs are never persisted | Type unique canary values into text, email, password and textarea controls; click supported controls; inspect all relevant local storage and guide data for canaries | Unit tests cover password-role and sensitive-label sanitization; real typed-value/browser capture test remains not covered |
 | P0 | Content-script privacy boundary | Confirm captured descriptor contains only allowed role/label fields and no value, selector, text, HTML or URL | Partially covered by code review and unit tests; no browser assertion |
 | P1 | Same-origin navigation | Navigate within same origin; draft pauses, recorder is reinjected, recording resumes once | Unit behavior covered; real Chromium E2E not covered |
 | P1 | Cross-origin navigation | Navigate to another origin; reinjection denial leaves draft paused and preserves existing steps | Mocked denial covered; real Chromium E2E not covered |
