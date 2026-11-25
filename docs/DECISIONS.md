@@ -1,5 +1,16 @@
 # StepFlow decision log
 
+## 2026-11-25 — Guide save is local and atomic with draft cleanup
+
+**Status:** implemented on `feat/recording-mvp`; CI verification pending
+
+**Decision:** A non-empty stopped recording becomes a guide. Save the new guide list and clear the recording draft in a single `chrome.storage.local.set` operation. Empty recordings cannot be saved. Cancelling deletes the draft without creating a guide.
+
+**Rationale:** Avoid duplicate guides or half-finished state if the extension service worker is interrupted between separate writes. Keep the first release local-first and easy to reason about.
+
+**Product boundary:** The saved guide contains the sanitized step titles and timestamps only; it does not copy the tab ID, page origin, URL path, query, fragment, or page content.
+
+
 ## 2026-11-25 — First browser-integration permission boundary
 
 **Status:** implemented on `feat/recording-mvp`; CI verification pending
