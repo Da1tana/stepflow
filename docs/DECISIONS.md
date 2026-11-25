@@ -1,5 +1,17 @@
 # StepFlow decision log
 
+## 2026-11-25 — First browser-integration permission boundary
+
+**Status:** implemented on `feat/recording-mvp`; CI verification pending
+
+**Decision:** Use `activeTab` and `scripting` only. Start recording from the explicit extension popup action, then inject one recorder file into the active tab. Do not add persistent host permissions, the `tabs` permission, or static content scripts.
+
+**Rationale:** Keep page access temporary and user-initiated. The extension needs only the active tab ID and its temporarily granted URL to create a session and inject the recorder.
+
+**Privacy boundary:** The recorder accepts trusted click events only, considers a small allowlist of interactive elements, never reads values, page text, HTML, or selectors, and sends only role plus optional explicit accessible metadata. The service worker checks the extension sender, top frame, tab/session match, and sanitizes the descriptor again before local persistence.
+
+**Consequences / remaining validation:** The first slice persists a single local draft. Side-panel display, stop/save/cancel, navigation recovery, and dedicated recording E2E tests remain open. A passing CI run is required before this slice is considered verified.
+
 Record decisions that affect product scope, architecture, privacy, or delivery. Add new entries at the top with date, status, decision, rationale, and consequences. Revisit a decision only by adding a new entry; do not silently erase its history.
 
 ## 2026-11-25 — Chrome API review for Recording MVP
