@@ -16,7 +16,7 @@ Current implemented flow:
 5. The side panel renders the live steps.
 6. Finish/save converts a non-empty draft into a locally stored guide; cancel discards the draft.
 
-Screenshots, guide editing, and export are not part of the current milestone. Navigation lifecycle handling exists, but real-browser permission and restart behavior still require dedicated E2E verification.
+Screenshots, guide editing, and export are not part of the current milestone. Tab-close preservation and draft persistence after forced service-worker termination/restart are covered by Chromium E2E. Real browser-action popup invocation, trusted click capture, typed-value privacy canaries, and same-origin/cross-origin navigation recovery still require dedicated browser-level verification.
 
 ## Read these files first
 
@@ -67,7 +67,7 @@ An assistant using the GitHub integration may be able to read and write reposito
 
 ## Current handoff point
 
-Verified on 2026-11-25:
+Verified on 2026-11-25 (latest CI run #90, exact HEAD `e8ff75977a2afdfb4c7c84195dbf75e09beab075`):
 - PR #1 (foundation) is merged into `main`.
 - PR [#2](https://github.com/Da1tana/stepflow/pull/2) is closed and was never merged; it is superseded by draft [PR #3](https://github.com/Da1tana/stepflow/pull/3).
 - Active branch: `feat/recording-mvp-recovery`, based on the last complete CI-passing implementation commit. `main` is unchanged; inspect compare before each new task.
@@ -76,8 +76,9 @@ Verified on 2026-11-25:
 - Browser flow implemented: `activeTab` + `scripting`, popup start, content-script injection, trusted-click capture, sender/tab/frame/session checks, second sanitization boundary, local draft persistence, live side-panel display, finish/save, and cancel.
 - Navigation lifecycle handling is implemented in `src/background/recording-lifecycle.js`: pause on tab loading, attempt recorder reinjection after completion, resume only when injection succeeds, and preserve the draft as paused if access is denied. Tab closure also preserves the draft in a paused state.
 - Unit tests cover serialized loading/completion transitions, successful reinjection, denied reinjection, tab closure, and unrelated tabs. These use mocked browser APIs; real Chromium lifecycle E2E is still required.
-- Service-worker restart persistence is now covered by a real Chromium E2E: the test closes the service-worker CDP target, wakes the extension with a message, and verifies the recording draft survives in `chrome.storage.local`.
-- Tab-close preservation is covered by a real Chromium E2E.
+- Service-worker restart persistence is covered by Chromium E2E: the test closes the service-worker CDP target, wakes the extension with a message, and verifies the recording draft survives in `chrome.storage.local`.
+- Tab-close preservation is covered by Chromium E2E.
+- CI run [#90](https://github.com/Da1tana/stepflow/actions/runs/45605218843) passed on the exact HEAD above: 26/26 unit tests and 18/18 Chromium E2E tests, plus validation, package build, and artifact uploads.
 - Remaining before calling Recording MVP verified: a browser-level test of the real browser-action popup and trusted clicks; tests proving typed canary values never reach storage; real same-origin navigation reinjection; and cross-origin pause/recovery. Playwright's normal popup-page workaround is not equivalent: it opens a regular extension tab and does not grant `activeTab`; `chrome.action.openPopup()` is not exposed as an interactable Playwright page. Do not weaken permissions or sender validation just to force this test. Investigate a dedicated CDP/native-popup harness or document a manual acceptance test.
 - Screenshots, guide editor, and export are later milestones.
 - No local terminal execution is available in the current GitHub-only workflow. CI must be checked against the exact latest PR head; an older green run does not verify newer commits.
