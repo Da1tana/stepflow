@@ -16,7 +16,7 @@ Current implemented flow:
 5. The side panel renders the live steps.
 6. Finish/save converts a non-empty draft into a locally stored guide; cancel discards the draft.
 
-Screenshots, guide editing, and export are not part of the current milestone. Tab-close preservation and draft persistence after forced service-worker termination/restart are covered by Chromium E2E. Real browser-action popup invocation, trusted click capture, typed-value privacy canaries, and same-origin/cross-origin navigation recovery still require dedicated browser-level verification.
+Screenshots, guide editing, and export are not part of the current milestone. Tab-close preservation and draft persistence after forced service-worker termination/restart are covered by Chromium E2E. Real browser-action popup invocation, trusted click capture, typed-value privacy canaries, and same-origin/cross-origin navigation recovery now have dedicated Chromium E2E scenarios in the active branch; these remain pending until CI passes on the exact current head.
 
 ## Read these files first
 
@@ -67,7 +67,7 @@ An assistant using the GitHub integration may be able to read and write reposito
 
 ## Current handoff point
 
-Verified on 2026-11-25 (latest CI run #90, exact HEAD `e8ff75977a2afdfb4c7c84195dbf75e09beab075`):
+Last fully verified baseline on 2026-11-25: CI run #90, exact HEAD `e8ff75977a2afdfb4c7c84195dbf75e09beab075`. Current implementation HEAD `527f5ec4f92cf635e81c5addf4040e08fc6b1bdd` has new E2E coverage and awaits CI:
 - PR #1 (foundation) is merged into `main`.
 - PR [#2](https://github.com/Da1tana/stepflow/pull/2) is closed and was never merged; it is superseded by draft [PR #3](https://github.com/Da1tana/stepflow/pull/3).
 - Active branch: `feat/recording-mvp-recovery`, based on the last complete CI-passing implementation commit. `main` is unchanged; inspect compare before each new task.
@@ -79,7 +79,7 @@ Verified on 2026-11-25 (latest CI run #90, exact HEAD `e8ff75977a2afdfb4c7c84195
 - Service-worker restart persistence is covered by Chromium E2E: the test closes the service-worker CDP target, wakes the extension with a message, and verifies the recording draft survives in `chrome.storage.local`.
 - Tab-close preservation is covered by Chromium E2E.
 - CI run [#90](https://github.com/Da1tana/stepflow/actions/runs/45605218843) passed on the exact HEAD above: 26/26 unit tests and 18/18 Chromium E2E tests, plus validation, package build, and artifact uploads.
-- Remaining before calling Recording MVP verified: confirm the new native-popup/trusted-click/privacy E2E passes CI; real same-origin navigation reinjection; and cross-origin pause/recovery. A native action-popup harness using `chrome.action.openPopup()` has been added to the Chromium E2E suite. It attempts to exercise real popup startup, trusted page clicks, and typed-value canaries through draft and saved-guide storage. CI run #96 is pending; do not mark these scenarios verified until its E2E result is inspected. Do not weaken permissions or sender validation to force the test.
+- Remaining before calling Recording MVP verified: CI must pass the native-popup/trusted-click/privacy E2E and the new same-origin/cross-origin navigation scenarios on the exact current head. The Chromium suite now starts recording through `chrome.action.openPopup()`, checks typed-value canaries in draft and saved-guide storage, and verifies navigation pause/reinjection/resume and cross-origin denial. The previous run #100 was still in progress on an earlier head; do not mark these scenarios verified until a fresh run for the current head is green. Do not weaken permissions or sender validation to force the test.
 - Screenshots, guide editor, and export are later milestones.
 - No local terminal execution is available in the current GitHub-only workflow. CI must be checked against the exact latest PR head; an older green run does not verify newer commits.
 
