@@ -13,6 +13,8 @@ export const MSG = Object.freeze({
   APP_GET_STATE: 'app/get-state',
   RECORDING_START: 'recording/start',
   RECORDING_STEP_CAPTURED: 'recording/step-captured',
+  RECORDING_STOP: 'recording/stop',
+  RECORDING_CANCEL: 'recording/cancel',
 });
 
 export const STORAGE_KEYS = Object.freeze({
