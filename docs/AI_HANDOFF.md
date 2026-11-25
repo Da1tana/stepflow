@@ -6,12 +6,12 @@ This document is the entry point for any AI assistant or developer continuing St
 
 StepFlow is a Manifest V3 browser extension that records user actions and turns them into step-by-step guides. The initial product direction is local-first: no backend, no remote code, no paid API dependency in the MVP.
 
-The current milestone is **Recording MVP without screenshots**. The pure recording-domain foundation is implemented; browser injection and UI wiring are not:
+The current milestone is **Recording MVP without screenshots**. The pure recording core and first browser-integration slice are implemented on `feat/recording-mvp`:
 1. The user opens the extension popup (this explicit invocation grants temporary `activeTab` access to the active tab).
 2. The user starts recording; StepFlow will inject a recorder using `chrome.scripting`.
-3. StepFlow records safe descriptions of trusted user clicks.
-4. Steps appear in the side panel.
-5. The user stops and saves a guide locally, or cancels the draft.
+3. `src/content/recorder.js` captures trusted clicks on supported interactive elements and sends minimal descriptors.
+4. The service worker validates the sender/tab, sanitizes again, and persists the draft under `sf.recordingDraft`.
+5. Remaining: show steps in the side panel and implement stop/save/cancel.
 
 Screenshots, guide editing, and export are later milestones.
 
@@ -67,9 +67,10 @@ Verified on 2026-11-25:
 - PR #1 (foundation) is merged into `main`.
 - PR [#2](https://github.com/Da1tana/stepflow/pull/2) is an open draft; it is not merged.
 - `feat/recording-mvp` is synchronized with `main`; inspect compare before each new task.
-- The branch contains the project map plus the first pure recording-core implementation.
+- The branch contains the project map, pure recording core, and first browser-integration slice.
 - Implemented core modules: `privacy.js`, `step-label.js`, `restricted-url.js`, and `recording.js`, with corresponding Node unit tests.
-- Not implemented yet: manifest permission changes, content-script injection, trusted DOM click capture, service-worker handlers, draft storage integration, popup/side-panel recording controls, navigation recovery, and recording E2E tests.
+- Browser integration now includes `activeTab` + `scripting`, popup start, content-script injection, trusted click capture, sender validation, and local draft persistence.
+- Not implemented yet: side-panel live step rendering, stop/save/cancel controls, navigation recovery, and dedicated recording E2E coverage.
 - No local terminal execution is available in the current GitHub-only workflow. Do not claim CI success until the latest head SHA has a completed successful run.
 
 ## Definition of done for every implementation stage
