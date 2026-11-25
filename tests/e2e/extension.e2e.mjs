@@ -88,6 +88,44 @@ for (const locale of ['en-US', 'ru-RU']) {
       await page.close();
     });
 
+
+    test('side panel shows recording steps and can save or discard a draft', async () => {
+      const { page, errors } = await app.openPage('src/sidepanel/sidepanel.html');
+      const draft = {
+        id: 'recording-test',
+        status: 'recording',
+        tabId: 1,
+        origin: 'https://example.com',
+        startedAt: Date.now(),
+        updatedAt: Date.now(),
+        steps: [
+          { id: 'step-a', index: 1, title: 'Нажмите', createdAt: Date.now() },
+          { id: 'step-b', index: 2, title: 'Нажмите «Сохранить»', createdAt: Date.now() },
+        ],
+      };
+      await app.serviceWorker.evaluate((value) => chrome.storage.local.set({ 'sf.recordingDraft': value }), draft);
+      await page.waitForSelector('#recording-card:not([hidden])');
+      assert.equal(await page.locator('#recording-steps li').count(), 2);
+      assert.equal(await page.locator('#recording-steps').textContent(), '1Нажмите2Нажмите «Сохранить»');
+      await page.click('#stop-recording');
+      await page.waitForSelector('#recording-card[hidden]');
+      const saved = await app.serviceWorker.evaluate(() => chrome.storage.local.get(['sf.guides', 'sf.recordingDraft']));
+      assert.equal(saved['sf.guides'].length, 1);
+      assert.equal(saved['sf.guides'][0].steps.length, 2);
+      assert.equal(saved['sf.recordingDraft'], null);
+
+      const secondDraft = { ...draft, id: 'recording-cancel-test', steps: [{ id: 'step-c', index: 1, title: 'Нажмите', createdAt: Date.now() }] };
+      await app.serviceWorker.evaluate((value) => chrome.storage.local.set({ 'sf.recordingDraft': value }), secondDraft);
+      await page.waitForSelector('#recording-card:not([hidden])');
+      await page.click('#cancel-recording');
+      await page.waitForSelector('#recording-card[hidden]');
+      const afterCancel = await app.serviceWorker.evaluate(() => chrome.storage.local.get(['sf.guides', 'sf.recordingDraft']));
+      assert.equal(afterCancel['sf.guides'].length, 1, 'cancel does not create a guide');
+      assert.equal(afterCancel['sf.recordingDraft'], null);
+      assert.deepEqual(errors, []);
+      await page.close();
+    });
+
     test('guides from storage appear live in the side panel and popup', async () => {
       const { page, errors } = await app.openPage('src/sidepanel/sidepanel.html');
       await app.serviceWorker.evaluate(() =>
