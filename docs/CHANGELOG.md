@@ -4,6 +4,14 @@ This file is the chronological map of meaningful project changes. It complements
 
 ## 2026-11-25
 
+### Real Chromium navigation lifecycle coverage added (CI pending)
+- Added a browser-level scenario that starts recording through the native action popup, navigates within the same origin, observes the draft pause and resume transitions, and verifies a subsequent trusted click is captured.
+- The same scenario navigates to a different origin, verifies reinjection is denied after temporary `activeTab` access is revoked, and checks that the draft remains paused with previously captured steps intact.
+- The test uses two local HTTP fixture origins and an extension-page storage observer; it adds no browser permissions and does not read page content or URL data in the recorder.
+- Implementation commit: `b5d1dc1` adds the scenario; `527f5ec` makes pause/resume transition assertions event-based to avoid missing the transient paused state.
+- CI verification is pending on the exact current HEAD; no claim of browser-level pass is made.
+
+
 ### Native action-popup recording and storage privacy E2E (CI pending)
 - Added a Chromium harness that opens the extension's native action popup through `chrome.action.openPopup()` rather than navigating to the popup HTML as a regular tab.
 - Added a local HTTP fixture page and a scenario that starts recording from the native popup, performs real browser clicks on text/email/password/textarea fields and a safe button, then checks the draft and saved guide for unique typed-value canaries.
