@@ -8,7 +8,7 @@ This file is the chronological map of meaningful project changes. It complements
 - Reconciled project status and handoff notes with the implemented tab lifecycle coordinator and its mocked-API unit tests.
 - Recorded CI run #59 as passing on the latest verified branch head.
 - Added a dedicated test map separating verified unit/E2E coverage from outstanding real-browser acceptance scenarios.
-- Added a Chromium E2E for the service-worker sanitization boundary: a password-role descriptor containing a canary label must persist only as a generic password-step title. This is not a substitute for real form typing or a browser-action invocation test; CI is pending.
+- Added a password-canary regression test proving the recording core stores only a generic password-step title. A proposed extension-page message E2E was removed after Chromium confirmed that extension-page messages do not carry the tab sender metadata required by the content-script handler; this test approach did not represent a real content-script event.
 
 
 ### Recording navigation and tab-close recovery
