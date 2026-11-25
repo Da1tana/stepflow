@@ -6,9 +6,9 @@ This document is the entry point for any AI assistant or developer continuing St
 
 StepFlow is a Manifest V3 browser extension that records user actions and turns them into step-by-step guides. The initial product direction is local-first: no backend, no remote code, no paid API dependency in the MVP.
 
-The current milestone is **Recording MVP without screenshots**:
+The current milestone is **Recording MVP without screenshots**. The pure recording-domain foundation is implemented; browser injection and UI wiring are not:
 1. The user opens the extension popup (this explicit invocation grants temporary `activeTab` access to the active tab).
-2. The user starts recording; StepFlow injects a recorder using `chrome.scripting`.
+2. The user starts recording; StepFlow will inject a recorder using `chrome.scripting`.
 3. StepFlow records safe descriptions of trusted user clicks.
 4. Steps appear in the side panel.
 5. The user stops and saves a guide locally, or cancels the draft.
@@ -65,12 +65,12 @@ An assistant using the GitHub integration may be able to read and write reposito
 
 Verified on 2026-11-25:
 - PR #1 (foundation) is merged into `main`.
-- PR [#2](https://github.com/Da1tana/stepflow/pull/2) is an open draft for documentation and the Recording MVP plan; it is not merged.
-- `feat/recording-mvp` is synchronized with `main`: compare reports 16 commits ahead, 0 behind. The merge base is the current `main` commit.
-- PR #2's changed-file diff contains six documentation files only; no source-code implementation changes are present.
-- The branch synchronization was recorded as a normal two-parent merge commit; no force-push or history rewrite was used.
-- Chrome API research is recorded in `docs/DECISIONS.md` and `docs/plans/recording-mvp.md`.
-- No fresh successful CI run is claimed for the current branch.
+- PR [#2](https://github.com/Da1tana/stepflow/pull/2) is an open draft; it is not merged.
+- `feat/recording-mvp` is synchronized with `main`; inspect compare before each new task.
+- The branch contains the project map plus the first pure recording-core implementation.
+- Implemented core modules: `privacy.js`, `step-label.js`, `restricted-url.js`, and `recording.js`, with corresponding Node unit tests.
+- Not implemented yet: manifest permission changes, content-script injection, trusted DOM click capture, service-worker handlers, draft storage integration, popup/side-panel recording controls, navigation recovery, and recording E2E tests.
+- No local terminal execution is available in the current GitHub-only workflow. Do not claim CI success until the latest head SHA has a completed successful run.
 
 ## Definition of done for every implementation stage
 

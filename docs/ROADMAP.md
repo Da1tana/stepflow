@@ -13,32 +13,39 @@ Delivered in merged [PR #1](https://github.com/Da1tana/stepflow/pull/1).
 - Shared messaging/storage utilities and guide domain model.
 - Static validation, unit/E2E test infrastructure, packaging, and CI.
 
-## 1. Recording MVP — next
+## 1. Recording MVP — in progress
 
 **Goal:** record trusted user clicks and save a useful guide locally. No screenshots in this milestone.
 
-Scope:
-- Minimal permissions: `activeTab` and `scripting` in addition to existing permissions.
-- Start recording from the popup/action user gesture; side panel provides recording controls and explains how to grant access when needed.
-- Inject a recorder only into the active tab after permission is granted.
-- Capture safe descriptors for supported interactive elements.
-- Generate localized step labels in Russian and English.
+### 1A. Pure recording core — implemented on feature branch
+
+- Privacy-safe element descriptor sanitizer and origin-only URL handling.
+- Localized Russian/English step-title generation.
+- Restricted URL classifier.
+- Immutable recording session state transitions.
+- Unit tests for all four core modules.
+
+### 1B. Browser integration — next
+
+- Add only the required `activeTab` and `scripting` permissions, with reasons in manifest, validator, and README.
+- Start recording from the popup/action user gesture.
+- Inject the recorder only into the active tab after permission is granted.
+- Capture trusted click events from supported interactive elements.
 - Sanitize descriptors in the content script and validate/sanitize again in the service worker.
 - Persist draft state and serialize incoming steps safely.
 - Display steps live in the side panel.
 - Stop and save a guide; cancel and discard a draft.
 - Handle same-origin navigation, cross-origin pause/resume, restricted pages, tab close, and service-worker restart.
-- Add unit tests and browser E2E tests, including assertions that typed values and passwords never enter storage.
+- Add browser E2E tests, including assertions that typed values and passwords never enter storage.
 
-Acceptance criteria:
+### Acceptance criteria
+
 - A user can start, perform several supported clicks, see the steps, stop, and find the saved guide after reopening the panel.
 - Cancel discards the draft.
 - Unsupported/restricted pages fail with a clear user-facing explanation.
 - No form values, passwords, page text/HTML, URL query, or URL fragment are stored.
 - Unit tests, E2E tests, static validation, and CI pass.
 - Documentation accurately describes the implemented behavior and permissions.
-
-Before implementation, resolve the browser API and gesture questions in [DECISIONS.md](DECISIONS.md). The detailed proposal is [plans/recording-mvp.md](plans/recording-mvp.md).
 
 ## 2. Screenshot capture
 
@@ -49,12 +56,6 @@ Potential scope:
 - Highlight the target element without capturing sensitive values.
 - Store image data in IndexedDB; keep only an identifier/reference in guide metadata.
 - Define retention, storage limits, and failure behavior.
-
-Acceptance criteria:
-- Screenshots are associated with the correct steps.
-- Sensitive form content is not intentionally captured; privacy limitations and user controls are documented.
-- Storage limits and cleanup behavior are tested.
-- CI passes.
 
 This milestone must not begin until the Recording MVP is stable.
 
@@ -68,34 +69,15 @@ Potential scope:
 - Review or remove screenshots.
 - Persist edits locally.
 
-Acceptance criteria:
-- Editing does not corrupt existing guides.
-- Empty states, validation, and localization are covered by tests.
-
 ## 4. Export
 
 **Goal:** make guides useful outside the extension.
 
-Potential formats:
-- HTML.
-- Markdown.
-- PDF, if it can be supported without compromising the local-first approach.
-
-Acceptance criteria:
-- Exported guides preserve step order and available images.
-- Export works offline.
-- Output is tested with special characters and both supported locales.
+Potential formats: HTML, Markdown, and PDF if it can be supported without compromising local-first operation.
 
 ## 5. Validate demand and monetization
 
-Do not assume demand is proven by building the extension.
-
-After a usable MVP:
-- Put the product in front of target users who create internal procedures, onboarding guides, or support instructions.
-- Observe whether they complete a real workflow with it.
-- Measure activation, successful guide creation, repeat use, and willingness to pay.
-- Interview users about privacy, browser compatibility, and export needs.
-- Choose a monetization model only after evidence: free core with paid capabilities, team licensing, or another validated approach.
+Do not assume demand is proven by building the extension. After a usable MVP, test it with target users who create internal procedures, onboarding guides, or support instructions. Measure activation, successful guide creation, repeat use, and willingness to pay before choosing a pricing model.
 
 ## Working rules
 
