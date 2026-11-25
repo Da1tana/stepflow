@@ -25,16 +25,15 @@ Delivered in merged [PR #1](https://github.com/Da1tana/stepflow/pull/1).
 - Immutable recording session state transitions.
 - Unit tests for all four core modules.
 
-### 1B. Browser integration — next
+### 1B. Browser integration — first slice implemented on feature branch
 
-- Add only the required `activeTab` and `scripting` permissions, with reasons in manifest, validator, and README.
-- Start recording from the popup/action user gesture.
-- Inject the recorder only into the active tab after permission is granted.
-- Capture trusted click events from supported interactive elements.
-- Sanitize descriptors in the content script and validate/sanitize again in the service worker.
-- Persist draft state and serialize incoming steps safely.
-- Display steps live in the side panel.
-- Stop and save a guide; cancel and discard a draft.
+- Added only the required `activeTab` and `scripting` permissions, with reasons in manifest, validator, and README.
+- Popup starts recording after explicit user invocation.
+- Recorder is injected only into the active tab.
+- Trusted clicks on supported interactive elements are captured.
+- Descriptors are validated/sanitized again in the service worker.
+- A single draft and safe steps are persisted locally.
+- Remaining: display steps live in the side panel; stop and save a guide; cancel and discard a draft.
 - Handle same-origin navigation, cross-origin pause/resume, restricted pages, tab close, and service-worker restart.
 - Add browser E2E tests, including assertions that typed values and passwords never enter storage.
 
