@@ -50,3 +50,30 @@ export function addStep(guide, { title, description, screenshotId, url }) {
 export function countSteps(guides) {
   return guides.reduce((sum, g) => sum + (g.steps?.length || 0), 0);
 }
+
+/**
+ * Convert a stopped recording draft into an editable guide.
+ * Only already-sanitized step titles and timestamps are copied.
+ */
+export function createGuideFromRecording(session, { title = 'Untitled guide' } = {}) {
+  if (!session || session.status !== 'stopped') {
+    throw new TypeError('A stopped recording is required');
+  }
+  if (!Array.isArray(session.steps) || session.steps.length === 0) {
+    throw new TypeError('At least one recorded step is required');
+  }
+
+  const now = Date.now();
+  return {
+    id: uid(),
+    title: String(title).slice(0, 100),
+    steps: session.steps.map((step, index) => ({
+      id: step.id,
+      index: index + 1,
+      title: String(step.title).slice(0, 120),
+      createdAt: Number.isFinite(step.createdAt) ? step.createdAt : now,
+    })),
+    createdAt: session.startedAt || now,
+    updatedAt: now,
+  };
+}
