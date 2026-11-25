@@ -4,6 +4,12 @@ This file is the chronological map of meaningful project changes. It complements
 
 ## 2026-11-25
 
+### CI verification and test-map reconciliation
+- Reconciled `docs/TEST_MAP.md`, `docs/PROJECT_STATUS.md`, and `docs/AI_HANDOFF.md` with the exact current PR head `e8ff75977a2afdfb4c7c84195dbf75e09beab075`.
+- CI run [#90](https://github.com/Da1tana/stepflow/actions/runs/45605218843) passed: 26/26 unit tests, 18/18 Chromium E2E tests (9 English + 9 Russian), static validation, clean package build, screenshots, and extension artifact upload.
+- Explicitly retained the remaining acceptance gaps: real browser-action popup invocation and trusted click capture, typed-value storage canaries, and real-browser same-origin/cross-origin navigation recovery.
+
+
 ### Verification map and status reconciliation
 - Added `tests/unit/recorder.test.mjs` with a fake DOM harness to prove the content recorder ignores untrusted clicks and does not read form values, page text, or HTML. CI pending.
 - Added Chromium E2E coverage for closing the recorded tab and preserving the draft paused with captured steps.
