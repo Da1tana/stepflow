@@ -11,14 +11,15 @@ The current milestone is **Recording MVP without screenshots**. The pure recordi
 2. The user starts recording; StepFlow will inject a recorder using `chrome.scripting`.
 3. `src/content/recorder.js` captures trusted clicks on supported interactive elements and sends minimal descriptors.
 4. The service worker validates the sender/tab, sanitizes again, and persists the draft under `sf.recordingDraft`.
-5. Remaining: show steps in the side panel and implement stop/save/cancel.
+5. The side panel renders the live steps; stop/save converts the stopped draft into a locally stored guide; cancel discards it. This new slice must be verified by CI before being considered complete.
 
 Screenshots, guide editing, and export are later milestones.
 
 ## Read these files first
 
 1. `README.md` — product, setup, checks, and current capabilities.
-2. `docs/PROJECT_STATUS.md` — verified implementation status and known gaps.
+2. `docs/PRODUCT_OVERVIEW.ru.md` — plain-language product purpose, target users, scenarios, and future scope.
+3. `docs/PROJECT_STATUS.md` — verified implementation status and known gaps.
 3. `docs/ROADMAP.md` — milestone sequence and acceptance gates.
 4. `docs/CHANGELOG.md` — chronological map of meaningful changes.
 5. `docs/DECISIONS.md` — decisions, rationale, and open technical questions.
