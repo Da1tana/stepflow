@@ -11,11 +11,12 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 - Repository: [Da1tana/stepflow](https://github.com/Da1tana/stepflow)
 - Default branch: `main`
 - Foundation PR: [#1 — Фундамент расширения StepFlow на Manifest V3](https://github.com/Da1tana/stepflow/pull/1) — merged.
+- Documentation / project-map PR: [#2](https://github.com/Da1tana/stepflow/pull/2) — open draft, not merged.
 - Active workstream: `feat/recording-mvp`.
-- Latest comparison observed after documentation commits: **4 commits ahead, 1 commit behind** `main` (diverged).
-- The feature branch's changes relative to the merge base are documentation only: the recording plan plus project handoff/status/roadmap/change-log/decision-log documents. No source-code implementation changes are reported in the compare result.
+- Latest comparison: **10 commits ahead, 1 commit behind** `main` (diverged).
+- The feature branch diff contains documentation only: the recording plan and project map. No source-code implementation changes are reported.
 - Synchronization with `main` is pending. No force-push or history rewrite has been performed.
-- No open PR was found at the time of this check.
+- PR #2 currently reports `mergeable: false`; GitHub may still be calculating mergeability or there may be a conflict. Re-check before any merge/update action.
 
 ## Implemented in main
 
@@ -57,7 +58,7 @@ The detailed technical draft is in [plans/recording-mvp.md](plans/recording-mvp.
 - Persist session state in extension storage so service-worker suspension does not lose it.
 - Support one active recording session and the main frame only.
 
-**Important:** the plan is not yet implementation approval. Before coding, verify the Chrome API details for tab lifecycle events without the `tabs` permission, user-gesture requirements for `sidePanel.open`, and the exact re-grant flow. The open questions are tracked in [DECISIONS.md](DECISIONS.md).
+**Important:** the plan is not implementation approval. Before coding, verify Chrome API details for tab lifecycle events without the `tabs` permission, user-gesture requirements for `sidePanel.open`, and the exact re-grant flow. Open questions are tracked in [DECISIONS.md](DECISIONS.md).
 
 ## Project map / source of truth
 
@@ -73,11 +74,11 @@ The detailed technical draft is in [plans/recording-mvp.md](plans/recording-mvp.
 
 The merged PR #1 description reports that the foundation's validation, unit tests (3/3), and E2E tests (12/12) passed at the time of that PR. This is historical evidence for the foundation PR, not a fresh run against the current feature branch.
 
-The documentation commits were saved and the added files were read back from GitHub. The GitHub combined-status query for the latest documentation commit returned no status entries. No fresh local test run or successful CI run is claimed.
+All documentation files in PR #2 were read back from GitHub. The GitHub combined-status query for the latest documentation commit returned no status entries. No fresh local test run or successful CI run is claimed.
 
 ## Immediate next actions
 
-1. Synchronize `feat/recording-mvp` with the latest `main` using a normal merge/update-branch operation; never force-push.
+1. Resolve PR #2's reported non-mergeable state and synchronize `feat/recording-mvp` with the latest `main` using a normal merge/update-branch operation; never force-push.
 2. Verify the open technical questions in [DECISIONS.md](DECISIONS.md) against official Chromium documentation and a reproducible test.
 3. Review and finalize the recording plan against the actual foundation code.
 4. Implement a small vertical slice: permission-safe start, trusted click capture, validated step persistence, and visible step list.
