@@ -23,6 +23,8 @@ const read = (p) => readFileSync(join(root, p), 'utf8');
 const ALLOWED_PERMISSIONS = {
   sidePanel: 'Show the StepFlow side panel',
   storage: 'Persist settings and guides locally (chrome.storage.local)',
+  activeTab: 'Temporarily access the active tab after the user invokes StepFlow',
+  scripting: 'Inject the recorder into the user-authorized active tab',
 };
 
 const manifest = JSON.parse(read('manifest.json'));
@@ -64,13 +66,11 @@ const localeKeys = Object.fromEntries(
   locales.map((l) => [l, new Set(Object.keys(JSON.parse(read(`_locales/${l}/messages.json`))))]),
 );
 if (!locales.includes(manifest.default_locale)) fail(`default_locale "${manifest.default_locale}" has no _locales folder`);
-
 const base = localeKeys[manifest.default_locale] || new Set();
 for (const [locale, keys] of Object.entries(localeKeys)) {
   for (const k of base) if (!keys.has(k)) fail(`Locale "${locale}" is missing key "${k}"`);
   for (const k of keys) if (!base.has(k)) fail(`Locale "${locale}" has extra key "${k}"`);
 }
-
 const usedKeys = new Set();
 for (const m of JSON.stringify(manifest).matchAll(/__MSG_(\w+)__/g)) usedKeys.add(m[1]);
 
@@ -81,11 +81,9 @@ function walk(dir) {
     return statSync(full).isDirectory() ? walk(full) : [full];
   });
 }
-
 for (const file of walk(join(root, 'src'))) {
   const rel = relative(root, file);
   const text = readFileSync(file, 'utf8');
-
   if (file.endsWith('.html')) {
     for (const m of text.matchAll(/data-i18n(?:-[\w-]+)?="([\w]+)"/g)) usedKeys.add(m[1]);
     for (const m of text.matchAll(/(?:src|href)="([^"#:]+)"/g)) {
@@ -95,7 +93,6 @@ for (const file of walk(join(root, 'src'))) {
     if (/\son[a-z]+="/.test(text)) fail(`${rel}: inline event handler is blocked by MV3 CSP`);
     if (/(?:src|href)="(?:https?:)?\/\//.test(text)) fail(`${rel}: remote resources are not allowed`);
   }
-
   if (file.endsWith('.js')) {
     for (const m of text.matchAll(/(?:import|from)\s+['"](\.{1,2}\/[^'"]+)['"]/g)) {
       if (!existsSync(resolve(dirname(file), m[1]))) fail(`${rel}: unresolved import "${m[1]}"`);
@@ -104,10 +101,7 @@ for (const file of walk(join(root, 'src'))) {
     if (/\beval\(|new Function\(/.test(text)) fail(`${rel}: eval/new Function is not allowed in MV3`);
   }
 }
-
 for (const k of usedKeys) if (!base.has(k)) fail(`i18n key "${k}" is used but not defined`);
-
-// ---- Report ----------------------------------------------------------------
 if (errors.length) {
   console.error(`✗ ${errors.length} problem(s):\n  - ${errors.join('\n  - ')}`);
   process.exit(1);
