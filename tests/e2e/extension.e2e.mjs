@@ -142,6 +142,83 @@ for (const locale of ['en-US', 'ru-RU']) {
       });
     }
 
+    if (locale === 'en-US') {
+      test('same-origin navigation resumes capture and cross-origin navigation keeps it paused', async () => {
+        const makeServer = (label) => createServer((_request, response) => {
+          response.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
+          response.end(`<!doctype html><html><body>
+            <button id="safe-action">${label} safe action</button>
+          </body></html>`);
+        });
+        const sameOriginServer = makeServer('Same-origin');
+        const crossOriginServer = makeServer('Cross-origin');
+        const listen = (server) => new Promise((resolve, reject) => {
+          server.once('error', reject);
+          server.listen(0, '127.0.0.1', resolve);
+        });
+        await Promise.all([listen(sameOriginServer), listen(crossOriginServer)]);
+        const sameOriginAddress = sameOriginServer.address();
+        const crossOriginAddress = crossOriginServer.address();
+        const target = await app.context.newPage();
+
+        const readDraft = () => app.serviceWorker.evaluate(async () => {
+          const { 'sf.recordingDraft': value } = await chrome.storage.local.get('sf.recordingDraft');
+          return value ?? null;
+        });
+        const waitForDraft = async (predicate, message) => {
+          for (let attempt = 0; attempt < 100; attempt += 1) {
+            const value = await readDraft();
+            if (predicate(value)) return value;
+            await new Promise((resolve) => setTimeout(resolve, 100));
+          }
+          assert.fail(message);
+        };
+
+        try {
+          await target.goto(`http://127.0.0.1:${sameOriginAddress.port}/start`);
+          await target.bringToFront();
+          const popup = await app.openActionPopup();
+          await popup.page.waitForFunction(() => !document.getElementById('start-recording').disabled, null, { timeout: 5_000 });
+          const popupClosed = popup.page.waitForEvent('close', { timeout: 5_000 });
+          await popup.page.click('#start-recording');
+          await popupClosed;
+          assert.deepEqual(popup.errors, []);
+
+          const initial = await waitForDraft((value) => value?.status === 'recording', 'recording did not start');
+          assert.ok(initial.steps.length === 0);
+
+          await target.goto(`http://127.0.0.1:${sameOriginAddress.port}/same-origin`);
+          const resumed = await waitForDraft(
+            (value) => value?.status === 'recording' && value.pauseReason === null,
+            'same-origin navigation did not resume recording',
+          );
+          assert.equal(resumed.id, initial.id);
+          await target.locator('#safe-action').click();
+          const captured = await waitForDraft(
+            (value) => value?.status === 'recording' && value.steps.length === 1,
+            'recorder did not capture a click after same-origin navigation',
+          );
+          assert.match(captured.steps[0].title, /Same-origin safe action/);
+
+          await target.goto(`http://127.0.0.1:${crossOriginAddress.port}/cross-origin`);
+          const paused = await waitForDraft(
+            (value) => value?.status === 'paused' && value.pauseReason === 'navigation',
+            'cross-origin navigation should leave recording paused when activeTab access is revoked',
+          );
+          assert.equal(paused.id, initial.id);
+          assert.equal(paused.steps.length, 1, 'captured steps survive denied reinjection');
+          assert.match(paused.steps[0].title, /Same-origin safe action/);
+        } finally {
+          await target.close();
+          await Promise.all([
+            new Promise((resolve) => sameOriginServer.close(resolve)),
+            new Promise((resolve) => crossOriginServer.close(resolve)),
+          ]);
+          await app.serviceWorker.evaluate(() => chrome.storage.local.remove('sf.recordingDraft'));
+        }
+      });
+    }
+
     test('popup button opens the side panel', async () => {
       const { page, errors } = await app.openPage('src/popup/popup.html', { width: 340, height: 320 });
       await page.waitForFunction(() => !document.getElementById('open-panel').disabled);
