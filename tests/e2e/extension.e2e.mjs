@@ -89,7 +89,6 @@ for (const locale of ['en-US', 'ru-RU']) {
           const popupClosed = popup.page.waitForEvent('close', { timeout: 5_000 });
           await popup.page.click('#start-recording');
           await popupClosed;
-          await popup.openPromise;
           assert.deepEqual(popup.errors, []);
 
           for (const [selector, value] of [
