@@ -91,5 +91,20 @@
   },
   "comingSoon": {
     "message": "Скоро"
+  },
+  "recordingTitle": {
+    "message": "Идёт запись"
+  },
+  "recordingActive": {
+    "message": "Записываем поддерживаемые клики"
+  },
+  "recordingPaused": {
+    "message": "Запись приостановлена"
+  },
+  "finishRecording": {
+    "message": "Завершить и сохранить"
+  },
+  "cancelRecording": {
+    "message": "Отменить запись"
   }
 }
