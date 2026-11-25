@@ -11,6 +11,8 @@ This file is the chronological map of meaningful project changes. It complements
 - Added service-worker handlers that validate extension sender, top-frame/tab identity, and sanitize descriptors again before appending steps.
 - Added local persistence for one active draft at `sf.recordingDraft`.
 - Added RU/EN startup and error status strings and updated the popup smoke-test expectation.
+- First CI run caught a stale `comingSoon` locale key still used by the side panel after the popup cleanup; restored the key in both locales.
+- Tightened start-message authorization to the exact popup page.
 - This slice does not yet include stop/save/cancel controls, side-panel step rendering, or navigation recovery. Fresh CI is required for this new head.
 
 ### Recording core — first implementation slice
