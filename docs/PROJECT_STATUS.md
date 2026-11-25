@@ -13,10 +13,9 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 - Foundation PR: [#1 — Фундамент расширения StepFlow на Manifest V3](https://github.com/Da1tana/stepflow/pull/1) — merged.
 - Documentation / project-map PR: [#2](https://github.com/Da1tana/stepflow/pull/2) — open draft, not merged.
 - Active workstream: `feat/recording-mvp`.
-- Latest comparison before this status refresh: **13 commits ahead, 1 commit behind** `main` (diverged).
-- The feature branch diff contains documentation only: the recording plan and project map. No source-code implementation changes are reported.
-- Synchronization with `main` is pending. No force-push or history rewrite has been performed.
-- PR #2 currently reports `mergeable: false`; GitHub may still be calculating mergeability or there may be a conflict. Re-check before any merge/update action.
+- Latest GitHub comparison: **16 commits ahead, 0 behind** `main`; merge base equals the current `main` commit.
+- PR #2 diff contains six documentation files only. No source-code implementation changes are present.
+- Branch synchronization is complete through a normal two-parent merge commit. No force-push or history rewrite was used.
 
 ## Implemented in main
 
@@ -46,19 +45,26 @@ The current manifest permissions are `sidePanel` and `storage`. There are no hos
 - Recording-specific unit and E2E tests.
 - Screenshots, guide editor, and export.
 
-## Recording MVP plan
+## Recording MVP — verified technical direction
 
-The detailed technical draft is in [plans/recording-mvp.md](plans/recording-mvp.md). It proposes:
+The detailed proposal is in [plans/recording-mvp.md](plans/recording-mvp.md). Official Chrome documentation confirms:
 
-- Add only `activeTab` and `scripting` for the MVP; do not add broad host permissions, `tabs`, `webNavigation`, or static content scripts without a documented need.
-- Start recording from a popup/action user gesture, not from a side-panel click alone.
-- Pause when navigation leaves the granted origin and require the user to grant access again.
-- Capture only trusted click events and safe element descriptors.
-- Never collect form values, passwords, page HTML/text, document title, URL query, or URL fragment.
-- Persist session state in extension storage so service-worker suspension does not lose it.
-- Support one active recording session and the main frame only.
+- `activeTab` is granted when the user invokes the extension, including opening its popup, and remains available across same-origin navigation; it is revoked when navigating to a different origin or closing the tab.
+- `scripting.executeScript` requires the `scripting` permission plus host access; `activeTab` supplies temporary access for the invoked tab.
+- The `chrome.tabs` namespace and tab lifecycle events do not generally require the `tabs` permission. That permission primarily unlocks sensitive `url`, `pendingUrl`, `title`, and `favIconUrl` properties in tab queries. The `activeTab` grant supplies temporary host access to the invoked tab.
+- `chrome.sidePanel.open()` requires a user interaction. Invoke it directly from the popup's click handler; do not route it through an asynchronous service-worker message first.
 
-**Important:** the plan is not implementation approval. Before coding, verify Chrome API details for tab lifecycle events without the `tabs` permission, user-gesture requirements for `sidePanel.open`, and the exact re-grant flow. Open questions are tracked in [DECISIONS.md](DECISIONS.md).
+Implementation must still verify these assumptions in the project's actual Chromium E2E environment. For robust navigation handling, listen to `tabs.onUpdated` using non-sensitive fields such as tab ID and loading status, pause on navigation, and attempt reinjection after load. If reinjection fails because access was revoked, keep the session paused and ask the user to invoke the extension again.
+
+Do not add `tabs`, `webNavigation`, broad host permissions, or static content scripts without a new documented need and test.
+
+## Privacy constraints
+
+- Capture only trusted click events (`isTrusted === true`).
+- Never collect input values, passwords, textarea/select values, contenteditable contents, form contents, page HTML/text, document title, URL query, or URL fragment.
+- Do not use arbitrary page text as a fallback label.
+- Sanitize at the content-script boundary and validate/sanitize again in the service worker.
+- Regex redaction is only defense-in-depth, not a guarantee of privacy.
 
 ## Project map / source of truth
 
@@ -70,17 +76,17 @@ The detailed technical draft is in [plans/recording-mvp.md](plans/recording-mvp.
 - [plans/recording-mvp.md](plans/recording-mvp.md) — detailed recording proposal.
 - [ARCHITECTURE.md](ARCHITECTURE.md) — current architecture.
 
-## Existing checks and verification
+## Verification
 
-The merged PR #1 description reports that the foundation's validation, unit tests (3/3), and E2E tests (12/12) passed at the time of that PR. This is historical evidence for the foundation PR, not a fresh run against the current feature branch.
-
-All documentation files in PR #2 were read back from GitHub. The GitHub combined-status query for the latest documentation commit returned no status entries. No fresh local test run or successful CI run is claimed.
+- PR #1 reports that foundation validation, unit tests (3/3), and E2E tests (12/12) passed at the time of that PR. This is historical evidence only.
+- Documentation files in PR #2 were read back from GitHub.
+- Current branch comparison confirms the feature branch is synchronized with `main`.
+- No fresh successful CI run or local test run is claimed for the current branch.
 
 ## Immediate next actions
 
-1. Resolve PR #2's reported non-mergeable state and synchronize `feat/recording-mvp` with the latest `main` using a normal merge/update-branch operation; never force-push.
-2. Verify the open technical questions in [DECISIONS.md](DECISIONS.md) against official Chromium documentation and a reproducible test.
-3. Review and finalize the recording plan against the actual foundation code.
-4. Implement a small vertical slice: permission-safe start, trusted click capture, validated step persistence, and visible step list.
-5. Add unit and E2E coverage with privacy assertions.
-6. Verify CI, update this status and changelog, and keep the work in a reviewable PR. Do not merge without the repository owner's approval.
+1. Implement the first vertical slice: popup start, permission-safe content-script injection, trusted click descriptors, and draft persistence.
+2. Add privacy-focused unit tests before expanding UI.
+3. Display steps live in the side panel; implement stop/save/cancel.
+4. Add navigation, restricted-page, tab-close, and service-worker restart tests.
+5. Verify all checks in CI and update the project map. Keep the PR unmerged until the repository owner explicitly approves.
