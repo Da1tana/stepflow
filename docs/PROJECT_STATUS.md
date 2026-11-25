@@ -54,10 +54,12 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 
 ## Not implemented yet
 
-- Navigation and restart recovery for active recordings.
+- Service-worker tab lifecycle handling: pause on navigation start, reinject after navigation completes, resume only after successful injection, and preserve the draft paused when access is denied.
+- Tab closure preserves the current draft in a paused state so captured steps can still be saved or discarded.
+- Real Chromium navigation and service-worker restart recovery E2E verification.
 - Dedicated E2E coverage for starting a real recording from the popup and trusted page clicks.
-- Same-origin navigation reinjection and cross-origin pause/recovery.
-- Tab-close and service-worker restart recovery.
+- Real-browser verification of same-origin reinjection and cross-origin pause/recovery.
+- Service-worker restart recovery.
 - Dedicated recording E2E tests for real trusted clicks and privacy boundaries.
 - Screenshots, guide editor, and export.
 
