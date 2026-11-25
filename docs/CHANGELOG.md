@@ -17,7 +17,8 @@ This file is the chronological map of meaningful project changes. It complements
 - Guide persistence and draft clearing are performed in one `chrome.storage.local.set` update to avoid a half-completed save.
 - Added live recording-step rendering and finish/cancel controls to the side panel.
 - Added RU/EN strings and E2E coverage for displaying a draft, saving a guide, and discarding a draft.
-- CI for this newer slice is pending; do not mark it complete until the current head passes.
+- First E2E run passed validation and all 18 unit tests, then caught a test expectation mismatch: cancellation removes the draft key, so `chrome.storage.local.get` returns `undefined`, not `null`. Updated the assertion to normalize absent and null values; application behavior is unchanged.
+- CI for the corrected head is pending; do not mark it complete until the current head passes.
 
 
 ### Browser integration — first recording slice
