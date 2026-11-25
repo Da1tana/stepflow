@@ -1,5 +1,25 @@
 # StepFlow decision log
 
+## 2026-11-25 — Preserve recording drafts across tab lifecycle events
+
+**Status:** implemented; unit-tested with mocked Chrome APIs; real Chromium E2E still required
+
+**Decision:**
+- Observe `chrome.tabs.onUpdated` using only the tab ID and non-sensitive `changeInfo.status`.
+- Pause an active draft when navigation enters `loading`.
+- After `complete`, attempt to inject the recorder again. Resume only after injection succeeds.
+- If injection is denied (for example, after cross-origin navigation revokes `activeTab` access), keep the draft paused. Existing steps remain available for save or cancel.
+- If the recorded tab closes, preserve the draft in a paused state rather than silently deleting the user's work.
+- Serialize lifecycle events so asynchronous storage operations cannot allow a fast completion event to overtake the preceding loading transition.
+
+**Rationale:** Keep the MVP within the existing `activeTab` + `scripting` permission boundary. Do not add persistent host permissions, `tabs`, or `webNavigation` merely to recover a recording.
+
+**Consequences / validation required:**
+- Unit tests cover pause/reinject/resume, denied injection, tab closure, and unrelated tabs.
+- Mocked tests do not prove Chrome permission behavior. Real Chromium E2E must verify same-origin reinjection and cross-origin denial before this behavior is considered fully verified.
+- Service-worker termination/restart recovery remains a separate open item.
+
+
 ## 2026-11-25 — Guide save is local and atomic with draft cleanup
 
 **Status:** implemented and verified by CI run [#48](https://github.com/Da1tana/stepflow/actions/runs/45595528199)
