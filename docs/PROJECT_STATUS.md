@@ -11,10 +11,11 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 - Repository: [Da1tana/stepflow](https://github.com/Da1tana/stepflow)
 - Default branch: `main`
 - Foundation PR: [#1](https://github.com/Da1tana/stepflow/pull/1) — merged.
-- Active workstream PR: [#2](https://github.com/Da1tana/stepflow/pull/2) — open draft, not merged.
-- Active branch: `feat/recording-mvp`.
+- Previous workstream PR: [#2](https://github.com/Da1tana/stepflow/pull/2) — closed, never merged; superseded after a branch-tree recovery.
+- Active workstream PR: [#3](https://github.com/Da1tana/stepflow/pull/3) — open draft, not merged.
+- Active branch: `feat/recording-mvp-recovery`.
 - The branch is based on current `main`; inspect compare before every task.
-- All current recording work remains on the feature branch. No changes have been merged into `main`.
+- All recording work remains on the active feature branch. No changes have been merged into `main`.
 
 ## Implemented in main
 
@@ -27,7 +28,7 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 - Core guide model.
 - Static validation script, Node unit tests, Playwright E2E setup, GitHub Actions CI, and packaging.
 
-## Implemented on feat/recording-mvp
+## Implemented on feat/recording-mvp-recovery
 
 ### Pure recording core
 
@@ -81,8 +82,8 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 
 ## Verification
 
-- CI run [#30](https://github.com/Da1tana/stepflow/actions/runs/45593035127) for browser-integration commit `bbb0e6f` passed: manifest/permissions/i18n validation, unit tests, Chromium installation, clean package build, and existing Chromium E2E suite.
-- The side-panel save/cancel slice is newer than run #30; its unit/E2E and CI status must be checked against the latest head before calling it verified.
+- CI run [#48](https://github.com/Da1tana/stepflow/actions/runs/45595528199) passed on the implementation head: manifest/permissions/i18n validation, all 18 unit tests, Chromium installation, clean package build, side-panel save/cancel E2E in RU and EN, and artifact uploads.
+- The current recovery branch contains only subsequent documentation synchronization commits on top of that tested implementation; its PR-triggered CI run is checked separately.
 - The E2E suite verifies the existing popup/panel flows and localization. Dedicated real-click recording/privacy E2E tests are still outstanding.
 - No local terminal execution is available in the current GitHub-only workflow.
 
