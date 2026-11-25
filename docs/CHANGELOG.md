@@ -4,6 +4,12 @@ This file is the chronological map of meaningful project changes. It complements
 
 ## 2026-11-25
 
+### Handoff map refreshed
+- Updated `docs/AI_HANDOFF.md` to match the current branch: pure recording core, popup-driven capture, local draft persistence, live side-panel steps, and save/cancel are implemented.
+- Explicitly listed the remaining verification gaps: real popup-started trusted-click E2E, sensitive-input storage assertions, navigation recovery, tab close, and service-worker restart.
+- Clarified that a historical green CI run does not verify newer commits and that no local terminal tests are available in the GitHub-only workflow.
+
+
 ### Recording completion and product definition — next implementation slice
 - Added a plain-language Russian product overview explaining the problem, target audience, everyday use cases, intended final workflow, product principles, and what is and is not implemented.
 - Added a pure conversion from a stopped non-empty recording to an editable guide model, with unit tests ensuring page origin is not copied into the guide.
