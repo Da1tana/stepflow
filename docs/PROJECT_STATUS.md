@@ -58,8 +58,7 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 
 - Real Chromium verification of navigation reinjection and cross-origin pause/recovery.
 - Service-worker termination/restart persistence is covered by Chromium E2E: the test terminates the worker target through CDP, wakes it with a message, and verifies the persisted draft.
-- Real browser-action popup start followed by trusted page-click capture is not covered; current popup smoke tests open the popup document as an extension page.
-- End-to-end typed-value canaries through real browser capture and storage are not covered; unit tests verify that the recorder does not read values and the core redacts password labels.
+- Native browser-action popup, real trusted page clicks, and typed-value canaries through draft and saved-guide storage have been added as a Chromium E2E scenario; CI run #96 is pending. Do not count these as verified until the run passes.
 - Screenshots, guide editor, and export.
 
 ## Privacy constraints
