@@ -38,7 +38,7 @@ Delivered in merged [PR #1](https://github.com/Da1tana/stepflow/pull/1).
 - Cancel discards the current draft without creating a guide.
 - Implemented lifecycle response: pause on navigation loading, attempt recorder reinjection after completion, resume only after successful injection, and retain a paused draft when access is denied.
 - Tab closure preserves the draft in a paused state so already captured steps remain saveable.
-- Unit tests cover lifecycle transitions with mocked Chrome APIs. Real Chromium lifecycle E2E remains outstanding for same-origin reinjection, cross-origin pause, and tab close; service-worker restart recovery also needs verification.
+- Unit tests cover lifecycle transitions with mocked Chrome APIs. Real Chromium E2E now covers tab-close preservation and draft persistence after forced service-worker termination/restart. Real-browser same-origin reinjection and cross-origin pause remain outstanding.
 - E2E covers side-panel display, save and cancel using a controlled draft fixture, plus popup/panel smoke flows. Remaining: real browser-action popup start, trusted page click capture, and storage assertions for typed values/passwords.
 
 ### Acceptance criteria
