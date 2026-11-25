@@ -54,5 +54,52 @@ export async function launchWithExtension({ headless = !process.env.HEADED, user
     return { page, errors };
   }
 
-  return { context, serviceWorker, extensionId, openPage };
+  async function openActionPopup() {
+    const popupPromise = context.waitForEvent('page', { timeout: 5_000 });
+    const openPromise = serviceWorker.evaluate(async () => {
+      if (typeof chrome.action.openPopup !== 'function') {
+        throw new Error('chrome.action.openPopup is unavailable in this Chromium build');
+      }
+      await chrome.action.openPopup();
+    });
+    // Some Chromium builds settle openPopup only after the popup closes.
+    // Observe the popup target first so the test can interact with it.
+    openPromise.catch(() => {});
+    const page = await popupPromise;
+    const errors = [];
+    page.on('pageerror', (err) => errors.push(err.message));
+    page.on('console', (msg) => msg.type() === 'error' && errors.push(msg.text()));
+    await page.waitForLoadState('domcontentloaded');
+    return { page, errors, openPromise };
+  }
+
+  async function stopServiceWorker() {
+    const browser = context.browser();
+    if (!browser) throw new Error('Persistent Chromium browser is unavailable');
+    const cdp = await browser.newBrowserCDPSession();
+    try {
+      const { targetInfos } = await cdp.send('Target.getTargets');
+      const target = targetInfos.find((item) => (
+        item.type === 'service_worker'
+        && item.url.startsWith(`chrome-extension://${extensionId}/`)
+      ));
+      if (!target) throw new Error('StepFlow service worker target was not found');
+      const { success } = await cdp.send('Target.closeTarget', { targetId: target.targetId });
+      if (!success) throw new Error('Chromium did not close the StepFlow service worker target');
+
+      // Confirm termination at the protocol level before the test wakes the worker again.
+      for (let attempt = 0; attempt < 30; attempt += 1) {
+        const { targetInfos: currentTargets } = await cdp.send('Target.getTargets');
+        if (!currentTargets.some((item) => item.targetId === target.targetId)) {
+          return target.targetId;
+        }
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      }
+      throw new Error('StepFlow service worker target remained active after Target.closeTarget');
+    } finally {
+      await cdp.detach();
+    }
+  }
+
+  return { context, serviceWorker, extensionId, openPage, openActionPopup, stopServiceWorker };
 }

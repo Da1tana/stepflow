@@ -1,32 +1,110 @@
 {
-  "extName": { "message": "StepFlow — step-by-step guides" },
-  "extDescription": { "message": "Record your actions in the browser and turn them into clear step-by-step guides with screenshots." },
-  "actionTitle": { "message": "StepFlow" },
-  "commandOpenPopup": { "message": "Open StepFlow" },
-
-  "statusReady": { "message": "Ready" },
-  "popupTagline": { "message": "Turn clicks into clear guides" },
-  "startRecording": { "message": "Start recording" },
-  "comingSoon": { "message": "Soon" },
-  "openPanel": { "message": "Open side panel" },
-  "statGuides": { "message": "Guides" },
-  "statSteps": { "message": "Steps" },
-  "shortcutHint": { "message": "Shortcut" },
-
-  "navGuides": { "message": "Guides" },
-  "navSettings": { "message": "Settings" },
-  "emptyTitle": { "message": "No guides yet" },
-  "emptyText": { "message": "Start a recording, walk through your process, and StepFlow will build a guide with screenshots for every step." },
-  "howItWorks": { "message": "How it works" },
-  "step1Title": { "message": "Record" },
-  "step1Text": { "message": "Press record and do the task as usual." },
-  "step2Title": { "message": "Capture" },
-  "step2Text": { "message": "Every click becomes a step with a screenshot." },
-  "step3Title": { "message": "Share" },
-  "step3Text": { "message": "Edit the guide and export it." },
-  "settingsTitle": { "message": "Settings" },
-  "settingsText": { "message": "Recording and export preferences will appear here." },
-  "settingAutoScreenshot": { "message": "Capture screenshot on every step" },
-  "settingHighlightClicks": { "message": "Highlight clicked elements" },
-  "localOnly": { "message": "All data stays on this device" }
+  "extName": {
+    "message": "StepFlow — step-by-step guides"
+  },
+  "extDescription": {
+    "message": "Record supported browser actions and turn them into clear step-by-step guides."
+  },
+  "actionTitle": {
+    "message": "StepFlow"
+  },
+  "commandOpenPopup": {
+    "message": "Open StepFlow"
+  },
+  "statusReady": {
+    "message": "Ready"
+  },
+  "statusStarting": {
+    "message": "Starting…"
+  },
+  "statusRecording": {
+    "message": "Recording"
+  },
+  "statusStartFailed": {
+    "message": "Could not start. Try a regular webpage."
+  },
+  "popupTagline": {
+    "message": "Turn clicks into clear guides"
+  },
+  "startRecording": {
+    "message": "Start recording"
+  },
+  "openPanel": {
+    "message": "Open side panel"
+  },
+  "statGuides": {
+    "message": "Guides"
+  },
+  "statSteps": {
+    "message": "Steps"
+  },
+  "shortcutHint": {
+    "message": "Shortcut"
+  },
+  "navGuides": {
+    "message": "Guides"
+  },
+  "navSettings": {
+    "message": "Settings"
+  },
+  "emptyTitle": {
+    "message": "No guides yet"
+  },
+  "emptyText": {
+    "message": "Start a recording and perform your task as usual. StepFlow will collect supported clicks into a draft you can review."
+  },
+  "howItWorks": {
+    "message": "How it works"
+  },
+  "step1Title": {
+    "message": "Record"
+  },
+  "step1Text": {
+    "message": "Press record and do the task as usual."
+  },
+  "step2Title": {
+    "message": "Capture"
+  },
+  "step2Text": {
+    "message": "Supported clicks become steps in your draft guide."
+  },
+  "step3Title": {
+    "message": "Share"
+  },
+  "step3Text": {
+    "message": "Review the steps and save your guide."
+  },
+  "settingsTitle": {
+    "message": "Settings"
+  },
+  "settingsText": {
+    "message": "Recording and export preferences will appear here."
+  },
+  "settingAutoScreenshot": {
+    "message": "Capture screenshot on every step"
+  },
+  "settingHighlightClicks": {
+    "message": "Highlight clicked elements"
+  },
+  "localOnly": {
+    "message": "All data stays on this device"
+  },
+  "comingSoon": {
+    "message": "Soon"
+  },
+  "recordingTitle": {
+    "message": "Recording in progress"
+  },
+  "recordingActive": {
+    "message": "Recording your supported clicks"
+  },
+  "recordingPaused": {
+    "message": "Recording paused"
+  },
+  "finishRecording": {
+    "message": "Finish and save"
+  },
+  "cancelRecording": {
+    "message": "Discard recording"
+  }
 }

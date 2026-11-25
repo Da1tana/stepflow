@@ -34,6 +34,21 @@
       <main class="panel__body">
         <!-- View: guides -->
         <section class="view" id="view-guides" role="tabpanel" data-view="guides">
+          <section class="sf-card recording-card" id="recording-card" hidden aria-live="polite">
+            <div class="recording-card__header">
+              <div>
+                <h2 data-i18n="recordingTitle"></h2>
+                <p class="sf-muted" id="recording-status"></p>
+              </div>
+              <span class="sf-badge" id="recording-count">0</span>
+            </div>
+            <ol class="recording-steps" id="recording-steps"></ol>
+            <div class="recording-actions">
+              <button class="sf-btn sf-btn--primary" id="stop-recording" type="button" data-i18n="finishRecording"></button>
+              <button class="sf-btn" id="cancel-recording" type="button" data-i18n="cancelRecording"></button>
+            </div>
+            <p class="recording-error" id="recording-error" role="alert" hidden></p>
+          </section>
           <ul class="guide-list" id="guide-list" hidden></ul>
 
           <div class="empty" id="empty-state">
