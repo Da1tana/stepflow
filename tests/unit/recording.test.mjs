@@ -32,6 +32,17 @@ test('appends safe steps immutably and drops sensitive labels', () => {
   assert.equal(JSON.stringify(third).includes('user@example.com'), false);
 });
 
+test('password canary never appears in a persisted recording step', () => {
+  const active = createRecordingSession({ tabId: 1, pageUrl: 'https://example.com', now: 1 });
+  const next = appendRecordingStep(active, {
+    role: 'password',
+    label: 'private-password-canary-123',
+  }, { locale: 'ru', now: 2 });
+  assert.equal(next.steps.length, 1);
+  assert.equal(next.steps[0].title, 'Нажмите на поле пароля');
+  assert.equal(JSON.stringify(next).includes('private-password-canary-123'), false);
+});
+
 test('pause, resume, stop and cancel follow explicit state transitions', () => {
   const active = createRecordingSession({ tabId: 1, pageUrl: 'https://example.com', now: 1 });
   const paused = pauseRecording(active, 'navigation', 2);
