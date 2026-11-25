@@ -4,6 +4,12 @@ This file is the chronological map of meaningful project changes. It complements
 
 ## 2026-11-25
 
+### Native action-popup recording and storage privacy E2E (CI pending)
+- Added a Chromium harness that opens the extension's native action popup through `chrome.action.openPopup()` rather than navigating to the popup HTML as a regular tab.
+- Added a local HTTP fixture page and a scenario that starts recording from the native popup, performs real browser clicks on text/email/password/textarea fields and a safe button, then checks the draft and saved guide for unique typed-value canaries.
+- CI run [#96](https://github.com/Da1tana/stepflow/actions/runs/45605686471) is in progress on the implementation head. The scenario remains pending until Chromium E2E completes successfully.
+
+
 ### CI verification and test-map reconciliation
 - Reconciled `docs/TEST_MAP.md`, `docs/PROJECT_STATUS.md`, and `docs/AI_HANDOFF.md` with the exact current PR head `e8ff75977a2afdfb4c7c84195dbf75e09beab075`.
 - CI run [#90](https://github.com/Da1tana/stepflow/actions/runs/45605218843) passed: 26/26 unit tests, 18/18 Chromium E2E tests (9 English + 9 Russian), static validation, clean package build, screenshots, and extension artifact upload.
