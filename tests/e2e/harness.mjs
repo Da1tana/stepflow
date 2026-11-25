@@ -55,7 +55,6 @@ export async function launchWithExtension({ headless = !process.env.HEADED, user
   }
 
   async function openActionPopup() {
-    if (typeof chrome === 'undefined') throw new Error('This helper must run in the test process');
     const popupPromise = context.waitForEvent('page', { timeout: 5_000 });
     await serviceWorker.evaluate(async () => {
       if (typeof chrome.action.openPopup !== 'function') {
