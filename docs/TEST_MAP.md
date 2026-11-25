@@ -23,8 +23,8 @@ This file is the acceptance-test inventory. A feature is not considered verified
 | Denied reinjection preserves paused draft | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
 | Tab close preserves captured steps | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
 | Browser tab close preserves draft in Chromium | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered; CI #74 passed |
-| Real Chromium tab close preserves the draft paused | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered; CI #74 passed |
-| Draft survives forced service-worker termination and restart | `tests/e2e/extension.e2e.mjs` + CDP helper in `tests/e2e/harness.mjs` | Chromium E2E | Added; CI pending |
+| Real Chromium tab close preserves the draft paused | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered; CI #82 passed |
+| Draft survives forced service-worker termination and restart | `tests/e2e/extension.e2e.mjs` + CDP helper in `tests/e2e/harness.mjs` | Chromium E2E | Covered; CI #82 passed |
 | Unrelated tabs do not affect recording | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Covered |
 | Manifest, permissions, paths and i18n validation | `scripts/validate.mjs` in CI | Static validation | Covered |
 | Popup render and state | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Covered |
@@ -45,13 +45,13 @@ This file is the acceptance-test inventory. A feature is not considered verified
 | P1 | Same-origin navigation | Navigate within same origin; draft pauses, recorder is reinjected, recording resumes once | Unit behavior covered; real Chromium E2E not covered |
 | P1 | Cross-origin navigation | Navigate to another origin; reinjection denial leaves draft paused and preserves existing steps | Mocked denial covered; real Chromium E2E not covered |
 | P1 | Recorded tab closes | Draft remains paused and can still be saved/discarded | Mocked unit + new Chromium E2E; CI pending |
-| P1 | Service worker terminates/restarts | Draft survives worker termination; worker wakes on a new message and reads the persisted draft | New Chromium E2E using CDP target close; CI pending |
+| P1 | Service worker terminates/restarts | Draft survives worker termination; worker wakes on a new message and reads the persisted draft | Covered in Chromium E2E using CDP target close; CI #82 passed |
 | P1 | Fast loading/complete event race | Serialized lifecycle transitions produce final recording state deterministically | Mocked unit covered; browser stress test not covered |
 | P2 | Restricted page start | Clear failure, no draft left behind, no unhandled errors | Partially covered by URL unit tests; browser E2E not covered |
 
 ## CI test map
 
-The latest fully passing run #74 executed these steps successfully:
+The latest fully passing run #82 executed these steps successfully:
 
 1. `npm ci`
 2. Manifest, permission, path and i18n validation
@@ -61,7 +61,7 @@ The latest fully passing run #74 executed these steps successfully:
 6. Chromium E2E suite
 7. Screenshot and extension artifact uploads
 
-Run #74 reported 23/23 unit tests and 16/16 Chromium E2E tests passing. It includes the real tab-close recovery scenario. No local commands were run by the assistant. The CI result is evidence for this exact PR head only; new commits require a new CI run.
+Run #82 reported 23/23 unit tests and 18/18 Chromium E2E tests passing. It includes real tab-close recovery and forced service-worker termination/restart. No local commands were run by the assistant. The CI result is evidence for this exact PR head only; new commits require a new CI run.
 
 ## Acceptance gate for Recording MVP
 
