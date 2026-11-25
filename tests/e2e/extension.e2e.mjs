@@ -46,7 +46,7 @@ for (const locale of ['en-US', 'ru-RU']) {
       assert.equal(await page.textContent('#guides-count'), '0');
       assert.equal(await page.textContent('#steps-count'), '0');
       assert.match(await page.textContent('#version'), /^v\d+\.\d+\.\d+$/);
-      assert.ok(await page.isDisabled('#start-recording'), 'recording is not available yet');
+      assert.ok(await page.isEnabled('#start-recording'), 'recording can be started from the popup');
       await assertTranslated(page);
       await page.screenshot({ path: `${SHOTS}/popup-${locale}.png` });
       assert.deepEqual(errors, []);
