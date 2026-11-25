@@ -2,8 +2,8 @@
 
 Last verified: 2026-11-25
 Branch: `feat/recording-mvp-recovery`
-Verified HEAD: `e8ff75977a2afdfb4c7c84195dbf75e09beab075`
-Latest fully passing CI baseline: [run #90](https://github.com/Da1tana/stepflow/actions/runs/45605218843). New native-popup privacy E2E is added on the current branch; [run #96](https://github.com/Da1tana/stepflow/actions/runs/45605686471) is still in progress.
+Latest implementation HEAD: `527f5ec4f92cf635e81c5addf4040e08fc6b1bdd`.
+Latest fully passing CI baseline: [run #90](https://github.com/Da1tana/stepflow/actions/runs/45605218843). Native-popup privacy and navigation lifecycle Chromium E2E scenarios are added; [run #100](https://github.com/Da1tana/stepflow/actions/runs/45606025821) was still running on the preceding implementation head when this map was updated. The new HEAD requires its own CI run.
 
 This is the acceptance-test inventory. Implementation or mocked unit coverage alone does not prove real browser behavior.
 
@@ -26,10 +26,10 @@ This is the acceptance-test inventory. Implementation or mocked unit coverage al
 | Tab closure preserves captured steps | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Passed |
 | Unrelated tabs do not affect recording | `tests/unit/recording-lifecycle.test.mjs` | Unit with mocked Chrome APIs | Passed |
 | Manifest, permissions, paths and i18n | `scripts/validate.mjs` in CI | Static validation | Passed |
-| Native browser-action popup opens and starts recording on a local HTTP page | `tests/e2e/extension.e2e.mjs` + `openActionPopup()` in `tests/e2e/harness.mjs` | Chromium E2E | Added; CI #96 pending |
+| Native browser-action popup opens and starts recording on a local HTTP page | `tests/e2e/extension.e2e.mjs` + `openActionPopup()` in `tests/e2e/harness.mjs` | Chromium E2E | Added; CI pending on latest HEAD |
 | Real trusted clicks on text, email, password, textarea and safe button are recorded | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Added; CI #96 pending |
 | Typed-value canaries absent from draft and saved-guide storage | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Added; CI #96 pending |
-| Popup and side-panel smoke flows in English and Russian | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Passed |
+| Same-origin navigation pauses, reinjects recorder, resumes once, then captures a trusted click | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Added; CI pending on latest HEAD |\n| Cross-origin navigation leaves draft paused and preserves prior steps after reinjection is denied | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Added; CI pending on latest HEAD |\n| Popup and side-panel smoke flows in English and Russian | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Passed |
 | Side-panel draft display, save and cancel | `tests/e2e/extension.e2e.mjs` | Chromium E2E with controlled storage fixture | Passed |
 | Guide list rendering and title-as-text safety | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Passed |
 | Recorded tab closure preserves draft paused | `tests/e2e/extension.e2e.mjs` | Chromium E2E | Passed |
@@ -38,7 +38,7 @@ This is the acceptance-test inventory. Implementation or mocked unit coverage al
 
 ## Latest CI evidence
 
-Run #90: [GitHub Actions](https://github.com/Da1tana/stepflow/actions/runs/45605218843), exact HEAD `e8ff75977a2afdfb4c7c84195dbf75e09beab075`.
+Baseline run #90: [GitHub Actions](https://github.com/Da1tana/stepflow/actions/runs/45605218843), exact HEAD `e8ff75977a2afdfb4c7c84195dbf75e09beab075`.
 
 - `npm ci`: passed.
 - Static validation: passed.
@@ -54,12 +54,12 @@ No local commands were run; verification was performed by GitHub Actions.
 
 | Priority | Scenario | Required proof | Status |
 |---|---|---|---|
-| P0 | Start recording through the actual browser-action popup on a normal web page | Real browser action popup user gesture grants temporary access and starts capture on the intended active tab | Not covered; current popup E2E opens the popup HTML as an extension page |
+| P0 | Start recording through the actual browser-action popup on a normal web page | Real browser action popup user gesture grants temporary access and starts capture on the intended active tab | Added; CI pending on latest HEAD |
 | P0 | Capture a real trusted page click | Real page click creates exactly one safe step in the active draft | Added; CI #96 pending |
 | P0 | Typed-value privacy canaries | Type unique canaries into text, email, password and textarea controls; inspect draft and saved guide storage for every canary | Added; CI #96 pending. Unit tests also prove the recorder does not read values. |
 | P0 | Browser-level content-script privacy boundary | Confirm real content-script message contains only allowed role/label fields and no value, selector, page text, HTML or sensitive URL data | Not covered end-to-end; fake-DOM unit coverage exists |
-| P1 | Same-origin navigation recovery | Navigate within the same origin; draft pauses, recorder is reinjected, recording resumes exactly once | Unit behavior passed; real Chromium E2E not covered |
-| P1 | Cross-origin navigation denial | Navigate to another origin; denied reinjection leaves draft paused and preserves captured steps | Mocked denial passed; real Chromium E2E not covered |
+| P1 | Same-origin navigation recovery | Navigate within the same origin; draft pauses, recorder is reinjected, recording resumes exactly once | Added; CI pending on latest HEAD |
+| P1 | Cross-origin navigation denial | Navigate to another origin; denied reinjection leaves draft paused and preserves captured steps | Added; CI pending on latest HEAD |
 | P1 | Fast loading/complete race | Browser stress test proves deterministic lifecycle state under rapid events | Serialized mocked unit coverage passed; browser stress test not covered |
 | P2 | Restricted page start | Clear user-facing failure, no draft left behind, no unhandled errors | URL classification unit coverage passed; browser E2E not covered |
 
