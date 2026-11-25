@@ -13,7 +13,7 @@ StepFlow is a local-first Manifest V3 browser extension intended to record brows
 - Foundation PR: [#1 — Фундамент расширения StepFlow на Manifest V3](https://github.com/Da1tana/stepflow/pull/1) — merged.
 - Documentation / project-map PR: [#2](https://github.com/Da1tana/stepflow/pull/2) — open draft, not merged.
 - Active workstream: `feat/recording-mvp`.
-- Latest comparison: **10 commits ahead, 1 commit behind** `main` (diverged).
+- Latest comparison before this status refresh: **13 commits ahead, 1 commit behind** `main` (diverged).
 - The feature branch diff contains documentation only: the recording plan and project map. No source-code implementation changes are reported.
 - Synchronization with `main` is pending. No force-push or history rewrite has been performed.
 - PR #2 currently reports `mergeable: false`; GitHub may still be calculating mergeability or there may be a conflict. Re-check before any merge/update action.
